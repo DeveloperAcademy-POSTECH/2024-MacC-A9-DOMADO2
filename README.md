@@ -1,5 +1,56 @@
-# 2024-MacC-A9-DOMADO2
-🍎가 되지 말고 🍅가 되라
+# 🍎가 되지 말고 🍅가 되라
+
+## 🚴‍♂️ App Statement 
+**자전가 라이딩을 즐기는 사용자에게 현재 속도를 명확히 보여줘 화면을 자주 보지 않아도 원하는 페이스를 유지할 수 있도록 도와주자.**
+
+## 🎨 Project Architecture 
+```mermaid
+graph TD
+    subgraph View
+        A[RidePreparationView]
+        B[ActiveRideView]
+        C[PauseRideView]
+        D[RideSummaryView]
+    end
+    subgraph ViewModel
+        E[RidePreparationViewModel]
+        F[ActiveRideViewModel]
+        G[PauseRideViewModel]
+        H[RideSummaryViewModel]
+    end
+    subgraph Model
+        I[RideSession]
+        K[LocationData]
+        L[RestPeriod]
+        M[SpeedDistribution]
+        N[RideSummary]
+        Q[LocationManager]
+    end
+    subgraph Coordinator
+        O[AppCoordinator]
+    end
+    A -->|Binds to| E
+    B -->|Binds to| F
+    C -->|Binds to| G
+    D -->|Binds to| H
+    E -->|Uses| I
+    F -->|Uses| I
+    G -->|Uses| I
+    H -->|Uses| I
+    I -->|Contains| K
+    I -->|Contains| L
+    I -->|Calculates| M
+    I -->|Generates| N
+    I -->|Uses| Q
+    Q -->|Provides| K
+    P[CoreData] -->|Persists| I
+    O -->|Controls| A
+    O -->|Controls| B
+    O -->|Controls| C
+    O -->|Controls| D
+    O -->|Uses| I
+```
+
 
 ## 🧩 Team 
 <table style="width: 100%; table-layout: fixed;">
