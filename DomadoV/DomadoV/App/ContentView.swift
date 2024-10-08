@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Coordinator를 활용해 현재 화면을 선택합니다. 
 struct ContentView: View {
     var body: some View {
         VStack {
