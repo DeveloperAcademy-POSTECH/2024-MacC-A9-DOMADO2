@@ -8,7 +8,7 @@
 import Combine
 
 /// 주행시작화면에 대한 정보 및 동작을 관리합니다.
-class RidePreparationViewModel: RideEventPublishable {
+class RidePreparationViewModel: ObservableObject, RideEventPublishable {
     
     /// AppCoordinator에게 RideEvent를 발행하여 화면을 전환합니다. 
     let rideEventSubject = PassthroughSubject<RideEvent, Never>()
