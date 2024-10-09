@@ -12,4 +12,9 @@ class RidePreparationViewModel: ObservableObject, RideEventPublishable {
     
     /// AppCoordinator에게 RideEvent를 발행하여 화면을 전환합니다. 
     let rideEventSubject = PassthroughSubject<RideEvent, Never>()
+    
+    /// 주행을 시작합니다.
+    func startRide() {
+        rideEventSubject.send(.didStartRide)
+    }
 }

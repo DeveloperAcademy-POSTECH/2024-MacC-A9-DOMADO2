@@ -12,4 +12,9 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
     
     /// AppCoordinator에게 RideEvent를 발행하여 화면을 전환합니다. 
     let rideEventSubject = PassthroughSubject<RideEvent, Never>()
+    
+    func pauseRide() {
+        rideEventSubject.send(.didPauseRide)
+    }
+    
 }
