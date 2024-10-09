@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/// App의 root 입니다. 
 @main
 struct DomadoVApp: App {
     var body: some Scene {
