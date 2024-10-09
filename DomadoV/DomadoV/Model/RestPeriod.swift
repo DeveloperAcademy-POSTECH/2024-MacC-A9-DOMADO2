@@ -10,8 +10,8 @@ import Foundation
 /// 휴식 정보를 구조화합니다. 
 struct RestPeriod {
     let startTime: Date
-    let endTime: Date
+    var endTime: Date?
     var duration: TimeInterval {
-        return endTime.timeIntervalSince(startTime)
+        return (endTime ?? Date()).timeIntervalSince(startTime)
     }
 }
