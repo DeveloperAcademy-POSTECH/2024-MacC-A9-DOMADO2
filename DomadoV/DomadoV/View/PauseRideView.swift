@@ -15,6 +15,9 @@ import SwiftUI
 /// 4. 재개버튼을 눌러 주행을 다시 시작합니다.
 /// 5. 종료 버튼을 눌러 주행을 종료합니다.
 struct PauseRideView: View {
+    
+    @ObservedObject var vm: PauseRideViewModel
+    
     var body: some View {
         VStack(spacing: 20){
             HStack{
@@ -25,13 +28,22 @@ struct PauseRideView: View {
             Text("휴식시간")
             
             HStack{
-                Text("종료버튼")
-                Text("재개버튼")
+                Button {
+                    vm.finishRide()
+                } label: {
+                    Text("종료버튼")
+                }
+
+                Button {
+                    vm.resumeRide()
+                } label: {
+                    Text("재개버튼")
+                }
             }
         }
     }
 }
 
 #Preview {
-    PauseRideView()
+    PauseRideView(vm: PauseRideViewModel())
 }

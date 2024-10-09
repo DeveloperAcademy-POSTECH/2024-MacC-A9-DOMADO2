@@ -15,11 +15,14 @@ import SwiftUI
 /// 4. 속도 구간별 시간을 보여줍니다.
 /// 5. 닫기 버튼을 눌러 주행준비 화면으로 돌아갑니다.
 struct RideSummaryView: View {
+    
+    @ObservedObject var vm: RideSummaryViewModel
+    
     var body: some View {
         Text("화이팅")
     }
 }
 
 #Preview {
-    RideSummaryView()
+    RideSummaryView(vm: RideSummaryViewModel())
 }
