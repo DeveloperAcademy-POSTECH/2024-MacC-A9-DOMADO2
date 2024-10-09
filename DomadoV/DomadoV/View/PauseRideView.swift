@@ -28,8 +28,17 @@ struct PauseRideView: View {
             Text("휴식시간")
             
             HStack{
-                Text("종료버튼")
-                Text("재개버튼")
+                Button {
+                    vm.finishRide()
+                } label: {
+                    Text("종료버튼")
+                }
+
+                Button {
+                    vm.resumeRide()
+                } label: {
+                    Text("재개버튼")
+                }
             }
         }
     }

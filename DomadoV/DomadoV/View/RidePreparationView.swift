@@ -22,7 +22,13 @@ struct RidePreparationView: View {
             
             Text("지도상의 현재 사용자 위치")
             
-            Text("시작 버튼 ")
+            Button {
+                vm.startRide()
+            } label: {
+                Text("시작 버튼")
+            }
+
+            
         }
     }
 }

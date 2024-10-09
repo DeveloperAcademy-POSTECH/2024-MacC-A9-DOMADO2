@@ -31,7 +31,13 @@ struct ActiveRideView: View {
                 
                 Text("현재 속도")
                 
-                Text("일시정지버튼")
+                Button {
+                    vm.pauseRide()
+                } label: {
+                    Text("일시정지버튼")
+                }
+                
+                
             }
         }
     }
