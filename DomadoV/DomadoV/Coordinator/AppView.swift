@@ -15,4 +15,6 @@ enum AppView {
     case pause
     /// 주행 종료
     case summary
+    /// 주행 기록
+    case history
 }
