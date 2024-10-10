@@ -17,4 +17,9 @@ class RidePreparationViewModel: ObservableObject, RideEventPublishable {
     func startRide() {
         rideEventSubject.send(.didStartRide)
     }
+    
+    /// 주행기록을 보여줍니다.
+    func showHistory() {
+        rideEventSubject.send(.didRequestHistory)
+    }
 }

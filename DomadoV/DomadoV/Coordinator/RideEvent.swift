@@ -17,4 +17,8 @@ enum RideEvent {
     case didResumeRide
     /// 정지화면 -> 주행완료
     case didFinishRide
+    /// 준비화면 -> 기록화면
+    case didRequestHistory
+    /// 기록화면 -> 준비화면
+    case didReturnToPreparation
 }

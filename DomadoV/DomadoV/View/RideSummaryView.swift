@@ -19,7 +19,15 @@ struct RideSummaryView: View {
     @ObservedObject var vm: RideSummaryViewModel
     
     var body: some View {
-        Text("화이팅")
+       
+        VStack(spacing: 20){
+            
+            Button {
+                vm.dismissSummary()
+            } label: {
+                Text("주행 준비 화면으로 돌아가기")
+            }
+        }
     }
 }
 

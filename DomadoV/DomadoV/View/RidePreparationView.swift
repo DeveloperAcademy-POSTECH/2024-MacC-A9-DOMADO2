@@ -27,6 +27,13 @@ struct RidePreparationView: View {
             } label: {
                 Text("시작 버튼")
             }
+            
+            Button {
+                vm.showHistory()
+            } label: {
+                Text("주행 기록 보기 버튼")
+            }
+
 
             
         }

@@ -31,7 +31,10 @@ struct ContentView: View {
             let vm = RideSummaryViewModel()
             RideSummaryView(vm: vm)
                 .onAppear{coordinator.bind(to: vm)}
-            
+        case .history:
+            let vm = RideHistoryViewModel()
+            RideHistoryView(vm: vm)
+                .onAppear{coordinator.bind(to: vm)}
         }
     }
 }
