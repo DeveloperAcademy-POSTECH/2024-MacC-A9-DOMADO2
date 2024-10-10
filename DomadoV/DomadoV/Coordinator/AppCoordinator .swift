@@ -39,6 +39,10 @@ class AppCoordinator: ObservableObject{
             currentView = .active
         case .didFinishRide:
             currentView = .summary
+        case .didRequestHistory:
+            currentView = .history
+        case .didReturnToPreparation:
+            currentView = .preparation
         }
     }
     
