@@ -29,15 +29,14 @@ class RideSession {
     private(set) var averageSpeed: Double = 0
     
     private var currentRestPeriod: RestPeriod?
-    private var targetSpeedRange: ClosedRange<Double>
+    private var targetSpeedRange: ClosedRange<Double> = 0...15
     private var speedDistribution = SpeedDistribution()
     private var previousLocation: LocationData?
     private var cancellables = Set<AnyCancellable>()
     private let processingQueue = DispatchQueue(label: "com.domadoV.rideProcessing", qos: .userInitiated)
     
     
-    init(targetSpeedRange: ClosedRange<Double>) {
-        self.targetSpeedRange = targetSpeedRange
+    init() {
         setupLocationSubscription()
         setupAuthorizationSubscription()
     }
