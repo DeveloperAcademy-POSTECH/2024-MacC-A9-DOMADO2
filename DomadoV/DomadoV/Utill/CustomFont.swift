@@ -45,7 +45,7 @@ struct CustomFont: ViewModifier {
         case .supplementaryTimeDistanceNumber:
             return 24
         case .listNumber:
-            return 12
+            return 16
         case .paceUnitNumber:
             return 13
         case .pageTitle:
