@@ -17,7 +17,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     /// CLLocationManager를 통해 사용자의 위치 정보를 얻습니다.
     private let locationManager = CLLocationManager()
     /// LocationManager는 CLLocationMananger로부터 받아온 위치정보를 다시 발행합니다.
-    private let locationSubject = PassthroughSubject<CLLocation, Never>()
+    let locationSubject = PassthroughSubject<CLLocation, Never>()
+    // 권한 상태 변경사항을 발행합니다.
+    let authorizationPublisher = CurrentValueSubject<CLAuthorizationStatus, Never>(.notDetermined)
     
     
     /// private 생성자를 이용해 외부에서의 초기화를 막아 싱글톤을 유지합니다.
@@ -26,6 +28,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        authorizationPublisher.send(checkLocationAuthorization())
     }
     
     /// 현재 사용자 위치 정보 권한을 확인합니다.
@@ -43,7 +46,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
     
-    /// 위치저보 수집을 중지합니다.
+    /// 위치정보 수집을 중지합니다.
     func stopUpdatingLocation() {
         locationManager.stopUpdatingLocation()
     }
@@ -53,6 +56,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         locationSubject.send(location)
+    }
+    
+    /// 위치 권한 변경사항이 감지될때 새로운 권한 상태를 subject를 통해 발행합니다. 
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        authorizationPublisher.send(manager.authorizationStatus)
     }
 
 }
