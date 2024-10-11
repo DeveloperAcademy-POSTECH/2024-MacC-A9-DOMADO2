@@ -30,7 +30,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		AFB136332CB80FC50094EBE0 /* Exceptions for "DomadoV" folder in "DomadoV" target */ = {
+		AFB1368C2CB8C8A40094EBE0 /* Exceptions for "DomadoV" folder in "DomadoV" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -43,7 +43,7 @@
 		AFB135792CB40ECD0094EBE0 /* DomadoV */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				AFB136332CB80FC50094EBE0 /* Exceptions for "DomadoV" folder in "DomadoV" target */,
+				AFB1368C2CB8C8A40094EBE0 /* Exceptions for "DomadoV" folder in "DomadoV" target */,
 			);
 			path = DomadoV;
 			sourceTree = "<group>";
@@ -412,6 +412,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DomadoV/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -447,6 +448,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DomadoV/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
