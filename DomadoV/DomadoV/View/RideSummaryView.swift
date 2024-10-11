@@ -32,5 +32,5 @@ struct RideSummaryView: View {
 }
 
 #Preview {
-    RideSummaryView(vm: RideSummaryViewModel())
+    RideSummaryView(vm: RideSummaryViewModel(rideSession: RideSession()))
 }

@@ -45,5 +45,5 @@ struct PauseRideView: View {
 }
 
 #Preview {
-    PauseRideView(vm: PauseRideViewModel())
+    PauseRideView(vm: PauseRideViewModel(rideSession: RideSession()))
 }
