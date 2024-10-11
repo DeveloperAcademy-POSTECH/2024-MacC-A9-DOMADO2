@@ -15,6 +15,7 @@ class AppCoordinator: ObservableObject{
     @Published var currentView: AppView = .preparation
     /// 현재 구독을 관리합니다.
     private var currentSubscription: AnyCancellable?
+    var rideSession: RideSession!
     
     /// 현재 view에 대한 viewModel의 publisher를 구독합니다.
     func bind(to viewModel: RideEventPublishable) {
