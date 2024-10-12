@@ -16,23 +16,20 @@ import SwiftUI
 struct RidePreparationView: View {
     
     @ObservedObject var vm: RidePreparationViewModel
+    @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     
     var body: some View {
         
         VStack(spacing: 20){
             
-            if let region = vm.mapRegion {
-                Map(coordinateRegion: .constant(region), showsUserLocation: true)
-                    .edgesIgnoringSafeArea(.all)
-            } else {
-                Color.black
-                    .edgesIgnoringSafeArea(.all)
-                Text("위치를 불러오는 중...")
-                    .foregroundColor(.white)
+            Map(position: $position) {
+                UserAnnotation()
             }
+            .mapStyle(.standard)
+            .edgesIgnoringSafeArea(.all)
+            .frame(height: 300)
             
             Text("주행 속도 범위 입력받는 arc 모양 Slider")
-            
             
             Button {
                 vm.startRide()
@@ -45,7 +42,22 @@ struct RidePreparationView: View {
             } label: {
                 Text("주행 기록 보기 버튼")
             }
-
+            
+            Spacer()
+            
+        }
+        .onAppear {
+            vm.prepareRide()
+        }
+        .alert(isPresented: $vm.showLocationPermissionAlert) {
+            Alert(
+                title: Text("위치 권한 필요"),
+                message: Text("이 앱은 위치 정보를 사용하여 주행을 기록합니다. 설정에서 위치 권한을 허용해주세요."),
+                primaryButton: .default(Text("설정으로 이동")) {
+                    vm.openSystemSettings()
+                },
+                secondaryButton: .cancel(Text("취소"))
+            )
         }
     }
 }
