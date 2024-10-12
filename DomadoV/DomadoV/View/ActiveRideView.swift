@@ -44,5 +44,5 @@ struct ActiveRideView: View {
 }
 
 #Preview {
-    ActiveRideView(vm: ActiveRideViewModel())
+    ActiveRideView(vm: ActiveRideViewModel(rideSession: RideSession()))
 }

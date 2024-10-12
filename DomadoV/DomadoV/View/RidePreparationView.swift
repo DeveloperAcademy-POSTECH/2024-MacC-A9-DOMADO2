@@ -41,5 +41,5 @@ struct RidePreparationView: View {
 }
 
 #Preview {
-    RidePreparationView(vm: RidePreparationViewModel())
+    RidePreparationView(vm: RidePreparationViewModel(rideSession: RideSession()))
 }

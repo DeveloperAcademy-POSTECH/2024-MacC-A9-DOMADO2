@@ -16,21 +16,30 @@ struct ContentView: View {
         
         switch coordinator.currentView {
         case .preparation:
-            let vm = RidePreparationViewModel()
+            let rideSession = RideSession()
+            let vm = RidePreparationViewModel(rideSession: rideSession)
             RidePreparationView(vm: vm)
-                .onAppear{coordinator.bind(to: vm)}
+                .onAppear{
+                    coordinator.rideSession = rideSession
+                    coordinator.bind(to: vm)}
         case .active:
-            let vm = ActiveRideViewModel()
-            ActiveRideView(vm: vm)
-                .onAppear{coordinator.bind(to: vm)}
+            if let rideSession = coordinator.rideSession {
+                let vm = ActiveRideViewModel(rideSession: rideSession)
+                ActiveRideView(vm: vm)
+                    .onAppear{coordinator.bind(to: vm)}
+            }
         case .pause:
-            let vm = PauseRideViewModel()
-            PauseRideView(vm: vm)
-                .onAppear{coordinator.bind(to: vm)}
+            if let rideSession = coordinator.rideSession{
+                let vm = PauseRideViewModel(rideSession: rideSession)
+                PauseRideView(vm: vm)
+                    .onAppear{coordinator.bind(to: vm)}
+            }
         case .summary:
-            let vm = RideSummaryViewModel()
-            RideSummaryView(vm: vm)
-                .onAppear{coordinator.bind(to: vm)}
+            if let rideSession = coordinator.rideSession{
+                let vm = RideSummaryViewModel(rideSession: rideSession)
+                RideSummaryView(vm: vm)
+                    .onAppear{coordinator.bind(to: vm)}
+            }
         case .history:
             let vm = RideHistoryViewModel()
             RideHistoryView(vm: vm)
