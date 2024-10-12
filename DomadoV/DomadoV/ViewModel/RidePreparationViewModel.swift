@@ -16,7 +16,8 @@ class RidePreparationViewModel: ObservableObject, RideEventPublishable {
     @Published var showLocationPermissionAlert = false
     /// 사용자 위치 권한 상태
     @Published var isLocationPermissionGranted = false
-    
+    /// 사용자 설정 속도 구간
+    @Published var userSettingTargetSpeedRange: ClosedRange<Double> = 5...15
     private let rideSession: RideSession
     /// AppCoordinator에게 RideEvent를 발행하여 화면을 전환합니다.
     let rideEventSubject = PassthroughSubject<RideEvent, Never>()
@@ -35,6 +36,7 @@ class RidePreparationViewModel: ObservableObject, RideEventPublishable {
             return
         }
         rideEventSubject.send(.didStartRide)
+        rideSession.start(settedtargetSpeedRange: userSettingTargetSpeedRange)
     }
     
     /// 주행기록을 보여줍니다.

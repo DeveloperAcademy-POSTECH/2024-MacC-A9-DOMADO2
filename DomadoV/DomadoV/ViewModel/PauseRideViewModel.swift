@@ -20,9 +20,11 @@ class PauseRideViewModel: ObservableObject, RideEventPublishable {
     
     func resumeRide(){
         rideEventSubject.send(.didResumeRide)
+        rideSession.resume()
     }
     
     func finishRide(){
         rideEventSubject.send(.didFinishRide)
+        rideSession.stop()
     }
 }

@@ -32,7 +32,7 @@ class RideSession {
     private var previousLocation: LocationData?
     private var cancellables = Set<AnyCancellable>()
     private let processingQueue = DispatchQueue(label: "com.domadoV.rideProcessing", qos: .userInitiated)
-    
+    private var timer: Timer?
     
     init() {
         setupLocationSubscription()
@@ -92,10 +92,13 @@ class RideSession {
     }
     
     /// 주행시작
-    func start() {
+    func start(settedtargetSpeedRange: ClosedRange<Double>) {
         guard state == .preparation else { return }
+        targetSpeedRange = settedtargetSpeedRange
         startTime = Date()
         state = .active
+        startTimer()
+        LocationManager.shared.startUpdatingLocation()
     }
 
     /// 주행 정지
@@ -104,6 +107,7 @@ class RideSession {
         state = .pause
         currentRestPeriod = RestPeriod(startTime: Date())
         LocationManager.shared.stopUpdatingLocation()
+        stopTimer()
     }
 
     /// 주행 재개
@@ -117,6 +121,7 @@ class RideSession {
         }
         state = .active
         LocationManager.shared.startUpdatingLocation()
+        startTimer()
     }
 
     /// 주행 종료
@@ -125,18 +130,33 @@ class RideSession {
         endTime = Date()
         state = .summary
         LocationManager.shared.stopUpdatingLocation()
+        stopTimer()
+    }
+    
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.updateTotalRideTime()
+        }
+    }
+    
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    private func updateTotalRideTime() {
+        guard let startTime = startTime else { return }
+        let currentTime = Date()
+        totalRideTime = currentTime.timeIntervalSince(startTime) - totalRestTime
     }
     
     /// 주행중일 때 주행 정보 업데이트
     private func handleNewLocation(_ locationData: LocationData) {
         locations.append(locationData)
-      
-        // 누적 시간 계산
-        let newTotalRideTime = locationData.timestamp.timeIntervalSince(startTime!) - totalRestTime
         
         // 거리 및 속도 계산
         var newTotalDistance = totalDistance
-        var newCurrentSpeed = locationData.speed
+        var newCurrentSpeed = locationData.speed * 3.6 // m/s -> km/h (단위변환)
         
         if let previousLocation = previousLocation {
             let distance = calculateDistance(from: previousLocation, to: locationData)
@@ -155,9 +175,8 @@ class RideSession {
         
         // 메인 스레드에서 UI 업데이트
         DispatchQueue.main.async {
-            self.totalRideTime = newTotalRideTime
             self.totalDistance = newTotalDistance
-            self.currentSpeed = newCurrentSpeed
+            self.currentSpeed = max(newCurrentSpeed, 0)
         }
         
         // 현재 위치를 이전 위치로 저장
