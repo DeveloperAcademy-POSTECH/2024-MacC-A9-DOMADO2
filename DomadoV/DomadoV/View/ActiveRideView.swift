@@ -18,27 +18,74 @@ struct ActiveRideView: View {
     @ObservedObject var vm: ActiveRideViewModel
     
     var body: some View {
-        ZStack{
-            /// 배경색
-            Color.yellow.ignoresSafeArea()
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 20){
-                HStack{
-                    Text("거리")
-                    
-                    Text("시간")
+            VStack(spacing: 30) {
+                speedometer
+                
+                HStack(spacing: 20) {
+                    distanceView
+                    Divider().background(Color.white)
+                    timeView
                 }
                 
-                Text("현재 속도")
+                Spacer()
                 
-                Button {
-                    vm.pauseRide()
-                } label: {
-                    Text("일시정지버튼")
-                }
-                
-                
+                pauseButton
             }
+            .padding()
+        }
+    }
+    
+    private var speedometer: some View {
+        VStack {
+            Text("Current Speed")
+                .font(.headline)
+                .foregroundColor(.white)
+            
+            Text(vm.formattedCurrentSpeed())
+                .font(.system(size: 64, weight: .bold, design: .rounded))
+                .foregroundColor(.green)
+        }
+    }
+    
+    private var distanceView: some View {
+        VStack {
+            Text("Distance")
+                .font(.subheadline)
+                .foregroundColor(.white)
+            
+            Text(vm.formattedTotalDistance())
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+        }
+    }
+    
+    private var timeView: some View {
+        VStack {
+            Text("Time")
+                .font(.subheadline)
+                .foregroundColor(.white)
+            
+            Text(vm.formattedTotalRideTime())
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+        }
+    }
+    
+    private var pauseButton: some View {
+        Button(action: {
+            vm.pauseRide()
+        }) {
+            Text("Pause")
+                .font(.headline)
+                .foregroundColor(.black)
+                .padding()
+                .background(Color.yellow)
+                .cornerRadius(10)
         }
     }
 }
