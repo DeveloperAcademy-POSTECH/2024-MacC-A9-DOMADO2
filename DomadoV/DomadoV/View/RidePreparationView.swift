@@ -5,6 +5,7 @@
 //  Created by 이종선 on 10/8/24.
 //
 
+import MapKit
 import SwiftUI
 
 /// 주행 시작전 화면
@@ -17,10 +18,21 @@ struct RidePreparationView: View {
     @ObservedObject var vm: RidePreparationViewModel
     
     var body: some View {
+        
         VStack(spacing: 20){
+            
+            if let region = vm.mapRegion {
+                Map(coordinateRegion: .constant(region), showsUserLocation: true)
+                    .edgesIgnoringSafeArea(.all)
+            } else {
+                Color.black
+                    .edgesIgnoringSafeArea(.all)
+                Text("위치를 불러오는 중...")
+                    .foregroundColor(.white)
+            }
+            
             Text("주행 속도 범위 입력받는 arc 모양 Slider")
             
-            Text("지도상의 현재 사용자 위치")
             
             Button {
                 vm.startRide()
@@ -34,8 +46,6 @@ struct RidePreparationView: View {
                 Text("주행 기록 보기 버튼")
             }
 
-
-            
         }
     }
 }
