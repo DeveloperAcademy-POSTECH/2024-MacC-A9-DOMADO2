@@ -33,6 +33,8 @@ class RideSession {
     private var cancellables = Set<AnyCancellable>()
     private let processingQueue = DispatchQueue(label: "com.domadoV.rideProcessing", qos: .userInitiated)
     private var timer: Timer?
+    private var filteredSpeed: Double = 0.0
+    private let filterFactor: Double = 0.3
     
     init() {
         setupLocationSubscription()
@@ -166,12 +168,22 @@ class RideSession {
             // locationData.speed가 유효하지 않은 경우 (-1.0), 계산된 속도 사용
             if newCurrentSpeed < 0 {
                 let timeDifference = locationData.timestamp.timeIntervalSince(previousLocation.timestamp)
-                newCurrentSpeed = timeDifference > 0 ? distance / timeDifference : 0
+                if timeDifference > 0 {
+                    newCurrentSpeed = (distance / timeDifference) * 3600 // km/s -> km/h 변환
+                } else {
+                    newCurrentSpeed = 0
+                }
             }
             
-            // 속도 분포 업데이트
+            // 저역 통과 필터 적용
+            filteredSpeed = (filterFactor * newCurrentSpeed) + ((1 - filterFactor) * filteredSpeed)
+            
+            // 속도 분포 업데이트 (필터링된 속도 사용)
             let deltaTime = locationData.timestamp.timeIntervalSince(previousLocation.timestamp)
-            speedDistribution.update(with: newCurrentSpeed, targetRange: targetSpeedRange, deltaTime: deltaTime)
+            speedDistribution.update(with: filteredSpeed, targetRange: targetSpeedRange, deltaTime: deltaTime)
+        } else {
+            // 첫 위치 데이터의 경우, 필터링된 속도를 현재 속도로 초기화
+            filteredSpeed = newCurrentSpeed
         }
         
         // 메인 스레드에서 UI 업데이트
