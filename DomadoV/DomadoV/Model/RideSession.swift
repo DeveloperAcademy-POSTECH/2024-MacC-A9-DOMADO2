@@ -15,8 +15,6 @@ class RideSession {
     @Published private(set) var currentSpeed: Double = 0
     @Published private(set) var totalDistance: Double = 0
     @Published private(set) var totalRideTime: TimeInterval = 0
-    @Published private(set) var currentLocation: LocationData?
-    
     @Published private(set) var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published private(set) var locationPermissionDenied: Bool = false
     
@@ -51,26 +49,14 @@ class RideSession {
             .store(in: &cancellables)
     }
     
-    
     private func setupLocationSubscription() {
         LocationManager.shared.locationSubject
             .receive(on: processingQueue)
             .sink { [weak self] locationData in
-                self?.handleLocationUpdate(LocationData(location: locationData))
+                self?.handleNewLocation(LocationData(location: locationData))
             }
             .store(in: &cancellables)
     }
-    
-    private func handleLocationUpdate(_ location: LocationData) {
-         switch state {
-         case .preparation:
-             updateUserNewLocation(location)
-         case .active:
-             handleNewLocation(location)
-         case .pause, .summary, .history:
-             break
-         }
-     }
     
     /// 주행준비
     func prepare() -> AnyPublisher<Bool, Never> {
@@ -141,11 +127,6 @@ class RideSession {
         LocationManager.shared.stopUpdatingLocation()
     }
     
-    /// 주행중이 아닐때 사용자 위치 정보 업데이트
-    private func updateUserNewLocation(_ locationData: LocationData){
-        DispatchQueue.main.async { self.currentLocation = locationData }
-    }
-
     /// 주행중일 때 주행 정보 업데이트
     private func handleNewLocation(_ locationData: LocationData) {
         locations.append(locationData)
