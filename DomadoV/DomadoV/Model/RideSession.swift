@@ -186,7 +186,7 @@ class RideSession {
 
     private func calculateDistance(from: LocationData, to: LocationData) -> Double {
         let fromLocation = CLLocation(latitude: from.coordinate.latitude, longitude: from.coordinate.longitude)
-        let toLocation = CLLocation(latitude: to.coordinate.latitude, longitude: from.coordinate.longitude)
+        let toLocation = CLLocation(latitude: to.coordinate.latitude, longitude: to.coordinate.longitude)
         return toLocation.distance(from: fromLocation) / 1000 // km로 변환
     }
 
