@@ -156,7 +156,7 @@ class RideSession {
         
         // 거리 및 속도 계산
         var newTotalDistance = totalDistance
-        var newCurrentSpeed = locationData.speed
+        var newCurrentSpeed = locationData.speed * 3.6 // m/s -> km/h (단위변환)
         
         if let previousLocation = previousLocation {
             let distance = calculateDistance(from: previousLocation, to: locationData)
