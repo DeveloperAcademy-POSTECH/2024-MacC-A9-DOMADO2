@@ -27,7 +27,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private override init() {
         super.init()
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 2.0
+        locationManager.activityType = .fitness
+        locationManager.pausesLocationUpdatesAutomatically = true
         authorizationPublisher.send(checkLocationAuthorization())
     }
     
