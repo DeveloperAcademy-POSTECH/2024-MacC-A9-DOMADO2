@@ -108,6 +108,7 @@ class RideSession {
         guard state == .active else { return }
         state = .pause
         currentSpeed = 0
+        filteredSpeed = 0
         currentRestPeriod = RestPeriod(startTime: Date())
         LocationManager.shared.stopUpdatingLocation()
         stopTimer()
@@ -190,7 +191,7 @@ class RideSession {
         // 메인 스레드에서 UI 업데이트
         DispatchQueue.main.async {
             self.totalDistance = newTotalDistance
-            self.currentSpeed = max(newCurrentSpeed, 0)
+            self.currentSpeed = max(self.filteredSpeed, 0)
         }
         
         // 현재 위치를 이전 위치로 저장
