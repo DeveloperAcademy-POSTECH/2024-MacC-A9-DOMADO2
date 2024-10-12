@@ -105,6 +105,7 @@ class RideSession {
     func pause() {
         guard state == .active else { return }
         state = .pause
+        currentSpeed = 0
         currentRestPeriod = RestPeriod(startTime: Date())
         LocationManager.shared.stopUpdatingLocation()
         stopTimer()
