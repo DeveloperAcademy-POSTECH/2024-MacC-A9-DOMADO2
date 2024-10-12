@@ -111,6 +111,7 @@ class RideSession {
         currentRestPeriod = RestPeriod(startTime: Date())
         LocationManager.shared.stopUpdatingLocation()
         stopTimer()
+        previousLocation = nil
     }
 
     /// 주행 재개
