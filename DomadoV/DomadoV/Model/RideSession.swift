@@ -35,6 +35,8 @@ class RideSession {
     private var timer: Timer?
     private var filteredSpeed: Double = 0.0
     private let filterFactor: Double = 0.3
+    private var lastLocationUpdateTime: Date?
+    private var speedCheckInterval: TimeInterval = 2.0
     
     init() {
         setupLocationSubscription()
@@ -141,6 +143,7 @@ class RideSession {
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.updateTotalRideTime()
+            self?.checkAndUpdateSpeed()
         }
     }
     
@@ -155,9 +158,25 @@ class RideSession {
         totalRideTime = currentTime.timeIntervalSince(startTime) - totalRestTime
     }
     
+    private func checkAndUpdateSpeed() {
+        guard state == .active else { return }
+        
+        if let lastUpdate = lastLocationUpdateTime {
+            let timeSinceLastUpdate = Date().timeIntervalSince(lastUpdate)
+            if timeSinceLastUpdate > speedCheckInterval && currentSpeed != 0 {
+                // speedCheckInterval 이상 위치 업데이트가 없으면 속도를 0으로 설정
+                DispatchQueue.main.async {
+                    self.currentSpeed = 0
+                    self.filteredSpeed = 0
+                }
+            }
+        }
+    }
+    
     /// 주행중일 때 주행 정보 업데이트
     private func handleNewLocation(_ locationData: LocationData) {
         locations.append(locationData)
+        lastLocationUpdateTime = Date()
         
         // 거리 및 속도 계산
         var newTotalDistance = totalDistance
