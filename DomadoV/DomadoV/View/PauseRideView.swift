@@ -22,14 +22,12 @@ struct PauseRideView: View {
     @State private var isActive = false
     
     var body: some View {
-        NavigationView {
             ZStack {
                 mainContent
                 if showAlert { alertView }
 
 
             }
-        }
     }
     
     // MARK: - Main Content
