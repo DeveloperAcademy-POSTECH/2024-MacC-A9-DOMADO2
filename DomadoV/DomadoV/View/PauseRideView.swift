@@ -19,7 +19,6 @@ struct PauseRideView: View {
     @ObservedObject var vm: PauseRideViewModel
     
     @State private var showAlert = false
-    @State private var isActive = false
     
     var body: some View {
             ZStack {
@@ -49,14 +48,11 @@ struct PauseRideView: View {
         VStack(spacing: 10) {
             HStack {
                 Text("거리")
-                    .font(.system(size: 17))
-                    .foregroundColor(.gray)
+                    .customFont(.infoTitle)
                 Spacer()
             }
             Text("105 km")
                 .customFont(.baseTimeDistanceNumber)
-                .font(.system(size: 32))
-                .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.top, 37)
@@ -67,15 +63,11 @@ struct PauseRideView: View {
     private var timeSection: some View {
         VStack(spacing: 10) {
             HStack {
-                Text("시간")
-                    .font(.system(size: 17))
-                    .foregroundColor(.gray)
+                Text("시간")                                .customFont(.infoTitle)
                 Spacer()
             }
             Text("01:30:27")
                 .customFont(.baseTimeDistanceNumber)
-                .font(.system(size: 32))
-                .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -85,12 +77,10 @@ struct PauseRideView: View {
     private var restTimeSection: some View {
         VStack(spacing: 17) {
             Text("휴식 시간")
-                .font(.system(size: 17))
-                .foregroundColor(.black)
+                .customFont(.infoTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
             Text("12:45")
                 .customFont(.paceSettingNumber)
-                .font(.system(size: 64))
                 .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(.top, 65)
@@ -121,7 +111,6 @@ struct PauseRideView: View {
             LongPressGesture(minimumDuration: 1.0)
                 .onEnded { _ in
                     vm.finishRide()
-                    self.isActive = true
                 }
         )
     }
@@ -162,10 +151,11 @@ struct PauseRideView: View {
     private var alertContent: some View {
         HStack(alignment: .center) {
             Image(systemName: "exclamationmark.bubble")
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
+                .opacity(0.5)
             Text("길게 눌러서 주행을 종료하세요.")
-                .font(.system(size: 17))
-                .foregroundColor(.black)
+                .customFont(.infoTitle)
+                .foregroundColor(.midnightCharcoal)
         }
         .frame(maxWidth: .infinity)
     }
@@ -173,7 +163,8 @@ struct PauseRideView: View {
     private var closeButton: some View {
         Button(action: { showAlert = false }) {
             Image(systemName: "xmark")
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
+                .opacity(0.3)
                 .padding(.vertical, -20)
                 .padding(.horizontal, 10)
         }
