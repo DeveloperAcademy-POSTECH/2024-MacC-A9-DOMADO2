@@ -28,6 +28,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 2.0
+        locationManager.activityType = .fitness
+        locationManager.pausesLocationUpdatesAutomatically = true
         authorizationPublisher.send(checkLocationAuthorization())
     }
     
@@ -55,6 +58,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     /// 기기의 위치변경이 감지될때마다 새로운 위치를 subject를 통해 발행합니다. 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        guard location.horizontalAccuracy <= 12 else { return }
         locationSubject.send(location)
     }
     
