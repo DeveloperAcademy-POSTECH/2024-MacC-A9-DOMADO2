@@ -5,50 +5,92 @@
 
 ## 🎨 Project Architecture 
 ```mermaid
-graph TD
-    subgraph View
-        A[RidePreparationView]
-        B[ActiveRideView]
-        C[PauseRideView]
-        D[RideSummaryView]
+flowchart TD
+    subgraph View["View"]
+        direction TB
+        A[ContentView]
+        J[RidePreparationView]
+        K[ActiveRideView]
+        L[PauseRideView]
+        M[RideSummaryView]
+        O[RideHistoryView]
+        P[RideDetailView]
     end
-    subgraph ViewModel
+
+    subgraph ViewModel["ViewModel"]
+        direction TB
         E[RidePreparationViewModel]
         F[ActiveRideViewModel]
         G[PauseRideViewModel]
         H[RideSummaryViewModel]
+        N[RideHistoryViewModel]
     end
-    subgraph Model
+
+    subgraph Model["Model"]
+        direction TB
         I[RideSession]
-        K[LocationData]
-        L[RestPeriod]
-        M[SpeedDistribution]
-        N[RideSummary]
+        K1[LocationData]
+        L1[RestPeriod]
+        M1[SpeedDistribution]
+        N1[RideSummary]
         Q[LocationManager]
+        R[CoreData]
     end
-    subgraph Coordinator
-        O[AppCoordinator]
+
+    subgraph Coordinator["Coordinator"]
+        direction TB
+        B[AppCoordinator]
     end
-    A -->|Binds to| E
-    B -->|Binds to| F
-    C -->|Binds to| G
-    D -->|Binds to| H
-    E -->|Uses| I
-    F -->|Uses| I
-    G -->|Uses| I
-    H -->|Uses| I
-    I -->|Contains| K
-    I -->|Contains| L
-    I -->|Calculates| M
-    I -->|Generates| N
+
+    subgraph Events["Events"]
+        direction TB
+        D[RideEventPublishable]
+        S[RideEvent]
+    end
+    
+    A -->|Uses| B
+    B -->|Manages| C((currentView))
+    B -->|Subscribes to| D
+    
+    D --> E & F & G & H & N
+    
+    E & F & G & H & N --> S
+    
+    S -->|Triggers| B
+    
+    C -->|Shows| J & K & L & M & O
+    
+    J -.->|User Action| E
+    K -.->|User Action| F
+    L -.->|User Action| G
+    M -.->|User Action| H
+    O -.->|User Action| N
+    
+    O -->|NavigationLink| P
+    O -.->|Back Button| N
+    
+    E & F & G & H & N -->|Uses| I
+    
+    I --> K1 & L1
+    I -->|Calculates| M1
+    I -->|Generates| N1
     I -->|Uses| Q
-    Q -->|Provides| K
-    P[CoreData] -->|Persists| I
-    O -->|Controls| A
-    O -->|Controls| B
-    O -->|Controls| C
-    O -->|Controls| D
-    O -->|Uses| I
+    Q -->|Provides| K1
+    R -->|Persists| I
+
+    classDef viewStyle fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef coordinatorStyle fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef eventStyle fill:#fbb,stroke:#333,stroke-width:2px;
+    classDef historyStyle fill:#bfb,stroke:#333,stroke-width:2px;
+    classDef sessionStyle fill:#ffa,stroke:#333,stroke-width:2px;
+    classDef componentStyle fill:#afa,stroke:#333,stroke-width:2px;
+
+    class A,J,K,L,M,O,P viewStyle;
+    class B coordinatorStyle;
+    class S eventStyle;
+    class O,P historyStyle;
+    class I sessionStyle;
+    class K1,L1,M1,N1 componentStyle;
 ```
 
 
