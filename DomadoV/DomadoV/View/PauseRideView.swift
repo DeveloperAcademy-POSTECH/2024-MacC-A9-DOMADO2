@@ -147,10 +147,10 @@ struct PauseRideView: View {
     private var alertView: some View {
         VStack(alignment: .center) {
             Spacer()
-            ZStack {
-                alertContent
-                closeButton
-            }
+            alertContent
+            .overlay(alignment: .topTrailing) {
+            closeButton
+                        }
             .frame(width: 333, height: 88)
             .background(Color.white)
             .cornerRadius(10)
@@ -171,16 +171,11 @@ struct PauseRideView: View {
     }
     
     private var closeButton: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button(action: { showAlert = false }) {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.gray)
-                }
-                .padding([.top, .trailing], 10)
-            }
-            Spacer()
+        Button(action: { showAlert = false }) {
+            Image(systemName: "xmark")
+                .foregroundColor(.gray)
+                .padding(.vertical, -20)
+                .padding(.horizontal, 10)
         }
     }
 }
