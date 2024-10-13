@@ -36,9 +36,7 @@ class RideSession {
     private var filteredSpeed: Double = 0.0
     private let filterFactor: Double = 0.3
     private var lastLocationUpdateTime: Date?
-    private var speedCheckInterval: TimeInterval = 2.0
-    private var lastKnownSpeed: Double = 0.0
-    private let speedDecayFactor: Double = 0.9
+    private var speedCheckInterval: TimeInterval = 1.8
     
     init() {
         setupLocationSubscription()
@@ -166,12 +164,10 @@ class RideSession {
         if let lastUpdate = lastLocationUpdateTime {
             let timeSinceLastUpdate = Date().timeIntervalSince(lastUpdate)
             if timeSinceLastUpdate > speedCheckInterval && currentSpeed > 0 {
-                // 속도를 점진적으로 감소시킵니다.
-                lastKnownSpeed *= pow(speedDecayFactor, timeSinceLastUpdate / speedCheckInterval)
-                
+                self.filteredSpeed = 0
                 DispatchQueue.main.async {
-                    self.currentSpeed = max(self.lastKnownSpeed, 0)
-                    self.filteredSpeed = self.currentSpeed
+                    self.currentSpeed = self.filteredSpeed
+                    
                 }
             }
         }
@@ -202,17 +198,10 @@ class RideSession {
                 
                 // 속도 분포 업데이트 (필터링된 속도 사용)
                 speedDistribution.update(with: filteredSpeed, targetRange: targetSpeedRange, deltaTime: timeDifference)
-                
-                // lastKnownSpeed 업데이트
-                lastKnownSpeed = filteredSpeed
-            } else {
-                // 시간 차이가 0이거나 음수인 경우 이전 속도를 유지합니다.
-                newCurrentSpeed = lastKnownSpeed
             }
         } else {
             // 첫 위치 데이터의 경우, 필터링된 속도를 현재 속도로 초기화
             filteredSpeed = newCurrentSpeed
-            lastKnownSpeed = filteredSpeed
         }
         
         // 메인 스레드에서 UI 업데이트
