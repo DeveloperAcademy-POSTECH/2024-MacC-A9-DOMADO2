@@ -28,11 +28,9 @@ struct RideHistoryCell: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(workout.date)
                 .customFont(.supplementaryTimeDistanceNumber)
-                .font(.system(size: 20))
             Text(workout.day)
                 .customFont(.infoTitle)
-                .font(.system(size: 17))
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
             
             HStack(spacing: 13) {
                 timeInfo
@@ -47,11 +45,10 @@ struct RideHistoryCell: View {
         HStack(spacing: 2) {
             Image(systemName: "clock")
                 .customFont(.listNumber)
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
             Text("\(workout.startTime) - \(workout.endTime)")
                 .customFont(.listNumber)
-                .font(.system(size: 16))
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
         }
     }
     
@@ -59,11 +56,10 @@ struct RideHistoryCell: View {
         HStack(spacing: 2) {
             Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
                 .customFont(.listNumber)
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
             Text("\(workout.distance) km")
                 .customFont(.listNumber)
-                .font(.system(size: 16))
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
         }
     }
     
@@ -74,17 +70,14 @@ struct RideHistoryCell: View {
         HStack(alignment: .lastTextBaseline, spacing: 1) {
             Text("\(workout.speed)")
                 .customFont(.baseTimeDistanceNumber)
-                .font(.system(size: 32))
-                .fontWeight(.bold)
                 .foregroundColor(speedColor(speed: workout.speed))
             VStack(alignment: .leading, spacing: 0) {
                 Text("km/h")
                     .customFont(.listNumber)
-                    .font(.system(size: 16))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.midnightCharcoal)
             }
             Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
+                .foregroundColor(.midnightCharcoal)
                 .opacity(0.5)
                 .font(.system(size: 17))
                 .padding(.leading, 20)
