@@ -37,6 +37,8 @@ class RideSession {
     private let filterFactor: Double = 0.3
     private var lastLocationUpdateTime: Date?
     private var speedCheckInterval: TimeInterval = 2.0
+    private var lastKnownSpeed: Double = 0.0
+    private let speedDecayFactor: Double = 0.9
     
     init() {
         setupLocationSubscription()
@@ -163,11 +165,13 @@ class RideSession {
         
         if let lastUpdate = lastLocationUpdateTime {
             let timeSinceLastUpdate = Date().timeIntervalSince(lastUpdate)
-            if timeSinceLastUpdate > speedCheckInterval && currentSpeed != 0 {
-                // speedCheckInterval 이상 위치 업데이트가 없으면 속도를 0으로 설정
+            if timeSinceLastUpdate > speedCheckInterval && currentSpeed > 0 {
+                // 속도를 점진적으로 감소시킵니다.
+                lastKnownSpeed *= pow(speedDecayFactor, timeSinceLastUpdate / speedCheckInterval)
+                
                 DispatchQueue.main.async {
-                    self.currentSpeed = 0
-                    self.filteredSpeed = 0
+                    self.currentSpeed = max(self.lastKnownSpeed, 0)
+                    self.filteredSpeed = self.currentSpeed
                 }
             }
         }
@@ -186,25 +190,29 @@ class RideSession {
             let distance = calculateDistance(from: previousLocation, to: locationData)
             newTotalDistance += distance
             
-            // locationData.speed가 유효하지 않은 경우 (-1.0), 계산된 속도 사용
-            if newCurrentSpeed < 0 {
-                let timeDifference = locationData.timestamp.timeIntervalSince(previousLocation.timestamp)
-                if timeDifference > 0 {
+            let timeDifference = locationData.timestamp.timeIntervalSince(previousLocation.timestamp)
+            if timeDifference > 0 {
+                // locationData.speed가 유효하지 않은 경우 계산된 속도를 사용합니다.
+                if newCurrentSpeed < 0 {
                     newCurrentSpeed = (distance / timeDifference) * 3600 // km/s -> km/h 변환
-                } else {
-                    newCurrentSpeed = 0
                 }
+                
+                // 저역 통과 필터 적용
+                filteredSpeed = (filterFactor * newCurrentSpeed) + ((1 - filterFactor) * filteredSpeed)
+                
+                // 속도 분포 업데이트 (필터링된 속도 사용)
+                speedDistribution.update(with: filteredSpeed, targetRange: targetSpeedRange, deltaTime: timeDifference)
+                
+                // lastKnownSpeed 업데이트
+                lastKnownSpeed = filteredSpeed
+            } else {
+                // 시간 차이가 0이거나 음수인 경우 이전 속도를 유지합니다.
+                newCurrentSpeed = lastKnownSpeed
             }
-            
-            // 저역 통과 필터 적용
-            filteredSpeed = (filterFactor * newCurrentSpeed) + ((1 - filterFactor) * filteredSpeed)
-            
-            // 속도 분포 업데이트 (필터링된 속도 사용)
-            let deltaTime = locationData.timestamp.timeIntervalSince(previousLocation.timestamp)
-            speedDistribution.update(with: filteredSpeed, targetRange: targetSpeedRange, deltaTime: deltaTime)
         } else {
             // 첫 위치 데이터의 경우, 필터링된 속도를 현재 속도로 초기화
             filteredSpeed = newCurrentSpeed
+            lastKnownSpeed = filteredSpeed
         }
         
         // 메인 스레드에서 UI 업데이트
@@ -215,7 +223,6 @@ class RideSession {
         
         // 현재 위치를 이전 위치로 저장
         previousLocation = locationData
-        
     }
 
     private func calculateDistance(from: LocationData, to: LocationData) -> Double {
