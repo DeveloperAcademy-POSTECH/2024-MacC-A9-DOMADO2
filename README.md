@@ -1,4 +1,10 @@
-# 🍎가 되지 말고 🍅가 되라
+# Pacepal - 나만의 페이스 메이커 
+
+<p align="center">
+  <a href="">
+    <img src="https://github.com/user-attachments/assets/ebcfde66-3d94-4a95-8022-4546345344b1" width="200" height="200" alt="app store">
+  </a>
+</p>
 
 ## 🚴‍♂️ App Statement 
 **자전가 라이딩을 즐기는 사용자에게 현재 속도를 명확히 보여줘 화면을 자주 보지 않아도 원하는 페이스를 유지할 수 있도록 도와주자.**
