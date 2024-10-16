@@ -25,7 +25,7 @@ class RideSession {
     private(set) var restPeriods: [RestPeriod] = []
     private(set) var totalRestTime: TimeInterval = 0
     private var averageSpeed: Double {
-        let effectiveRideTime = totalRideTime > 0 ? totalRideTime : 1  
+        let effectiveRideTime = totalRideTime > 0 ? totalRideTime : 1
         return totalDistance / (effectiveRideTime / 3600)
     }
     
