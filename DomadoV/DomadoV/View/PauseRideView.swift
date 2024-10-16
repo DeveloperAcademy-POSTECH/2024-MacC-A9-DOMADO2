@@ -96,7 +96,11 @@ struct PauseRideView: View {
     }
     
     private var stopButton: some View {
-        Button(action: { showAlert = true }) {
+        Button(action: { showAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            showAlert = false
+                        }
+        }) {
             Image(systemName: "stop.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
