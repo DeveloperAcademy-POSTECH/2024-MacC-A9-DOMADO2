@@ -24,7 +24,10 @@ class RideSession {
     private(set) var locations: [LocationData] = []
     private(set) var restPeriods: [RestPeriod] = []
     private(set) var totalRestTime: TimeInterval = 0
-    private(set) var averageSpeed: Double = 0
+    private var averageSpeed: Double {
+        let effectiveRideTime = totalRideTime > 0 ? totalRideTime : 1
+        return totalDistance / (effectiveRideTime / 3600)
+    }
     
     private var currentRestPeriod: RestPeriod?
     private var targetSpeedRange: ClosedRange<Double> = 0...15
@@ -221,7 +224,13 @@ class RideSession {
     }
 
     /// 주행종료후 주행 요약 생성
-    func generateRideSummary(){
-      
+    func generateRideSummary() -> RideSummary {
+        return RideSummary(
+            totalDistance: totalDistance,
+            totalRideTime: totalRideTime,
+            totalRestTime: totalRestTime,
+            averageSpeed: averageSpeed,
+            speedDistribution: speedDistribution
+        )
     }
 }
