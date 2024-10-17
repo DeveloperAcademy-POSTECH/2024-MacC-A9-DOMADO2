@@ -58,12 +58,27 @@ class RideHistoryManager {
         }
     }
     
-    func fetchAllRides() -> [Ride] {
+    func fetchAllRides() -> [RideRecord] {
         let context = coreDataManager.mainContext
         let fetchRequest: NSFetchRequest<Ride> = Ride.fetchRequest()
         
         do {
-            return try context.fetch(fetchRequest)
+            let rides = try context.fetch(fetchRequest)
+            return rides.map { ride in
+                RideRecord(
+                    id: ride.id ?? UUID().uuidString,
+                    startTime: ride.startTime ?? Date(),
+                    endTime: ride.endTime ?? Date(),
+                    totalDistance: ride.totalDistance,
+                    totalRidingTime: ride.totalRidingTime,
+                    targetSpeedLower: ride.targetSpeedLower,
+                    targetSpeedUpper: ride.targetSpeedUpper,
+                    timeInSlowZone: ride.timeInSlowZone,
+                    timeInTargetZone: ride.timeInTargetZone,
+                    timeInFastZone: ride.timeInFastZone,
+                    route: ride.route ?? []
+                )
+            }
         } catch {
             print("Error fetching rides: \(error)")
             return []
