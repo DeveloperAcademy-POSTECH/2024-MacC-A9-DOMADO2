@@ -128,7 +128,7 @@ struct SpeedCategoryView: View {
     let color: Color
     
     var body: some View {
-        VStack(alignment: .center, spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 5) {
                 Text(label)
                     .customFont(.subInfoTitle)
