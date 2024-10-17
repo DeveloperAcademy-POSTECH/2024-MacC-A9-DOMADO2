@@ -30,7 +30,7 @@ class RideSession {
     }
     
     private var currentRestPeriod: RestPeriod?
-    private var targetSpeedRange: ClosedRange<Double> = 0...15
+    private(set) var targetSpeedRange: ClosedRange<Double> = 0...15
     private var speedDistribution = SpeedDistribution()
     private var previousLocation: LocationData?
     private var cancellables = Set<AnyCancellable>()
