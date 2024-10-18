@@ -14,19 +14,16 @@ class RideSummaryViewModel: ObservableObject, RideEventPublishable {
     @Published private(set) var rideSummary: RideSummary?
     
     let rideSession: RideSession
-    let rideHistoryManager: RideHistoryManager
     /// AppCoordinator에게 RideEvent를 발행하여 화면을 전환합니다.
     let rideEventSubject = PassthroughSubject<RideEvent, Never>()
     
-    init(rideSession: RideSession, rideHistoryManager: RideHistoryManager = .shared) {
+    init(rideSession: RideSession) {
         self.rideSession = rideSession
-        self.rideHistoryManager = rideHistoryManager
     }
     
     /// 준비화면으로 돌아가기 
     func dismissSummary() {
         rideEventSubject.send(.didReturnToPreparation)
-        rideHistoryManager.saveRide(from: rideSession)
     }
     
     /// RideSession으로부터 주행 요약 정보 가져오기
