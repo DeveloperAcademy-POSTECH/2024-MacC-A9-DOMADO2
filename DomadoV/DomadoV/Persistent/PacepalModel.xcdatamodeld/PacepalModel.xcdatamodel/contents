@@ -3,7 +3,7 @@
     <entity name="Ride" representedClassName="Ride" syncable="YES">
         <attribute name="endTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="String"/>
-        <attribute name="routeData" attributeType="Binary"/>
+        <attribute name="routeData" optional="YES" attributeType="Binary"/>
         <attribute name="startTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="targetSpeedLower" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="targetSpeedUpper" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
