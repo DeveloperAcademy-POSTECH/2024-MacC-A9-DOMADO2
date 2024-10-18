@@ -41,7 +41,10 @@ class RideSession {
     private var lastLocationUpdateTime: Date?
     private var speedCheckInterval: TimeInterval = 1.8
     
-    init() {
+    let rideHistoryManager: RideHistoryManager
+    
+    init(rideHistoryManager: RideHistoryManager = .shared) {
+        self.rideHistoryManager = rideHistoryManager
         setupLocationSubscription()
         setupAuthorizationSubscription()
     }
@@ -141,6 +144,7 @@ class RideSession {
         state = .summary
         LocationManager.shared.stopUpdatingLocation()
         stopTimer()
+        rideHistoryManager.saveRide(from: self)
     }
     
     private func startTimer() {
