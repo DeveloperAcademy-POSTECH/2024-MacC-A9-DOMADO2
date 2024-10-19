@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 /// 주행 기록 화면
 ///
@@ -13,25 +14,22 @@ import SwiftUI
 /// 2. 각 셀을 눌렀을 때 해당 기록에 대한 상세뷰로 이동합니다.
 
 struct RideHistoryView: View {
-    
-    
-    // Properties
     @ObservedObject var vm: RideHistoryViewModel
     
-    
-    // Body
     var body: some View {
-        NavigationView {
-            VStack(spacing: 1) {
+        NavigationStack {
+            VStack(spacing: 0) {
                 navigationBar
                 Divider()
-                historyList
+                
+                if vm.records.isEmpty {
+                    emptyStateView
+                } else {
+                    historyList
+                }
             }
         }
     }
-    
-
-    //MARK: - navigationBar
     
     private var navigationBar: some View {
         HStack {
@@ -52,29 +50,122 @@ struct RideHistoryView: View {
             
             Color.clear.frame(width: 44, height: 44)
         }
+        .padding(.vertical, 10)
     }
     
-    
-    // MARK: - List
-    
     private var historyList: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(record) { workout in
-                    NavigationLink(destination: RideDetailView()) {
-                        RideHistoryCell(workout: workout)
+        List {
+            ForEach(vm.records) { record in
+                RideHistoryCell(ride: record)
+                    .onTapGesture {
+                        vm.selectedRide = record
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    Divider()
-                        .background(Color.gray.opacity(0.1))
-                }
+                    .listRowInsets(EdgeInsets())
             }
+            .onDelete(perform: deleteRecord)
+        }
+        .listStyle(PlainListStyle())
+        .navigationDestination(item: $vm.selectedRide) { workout in
+            RideDetailView(ride: workout)
+        }
+    }
+    
+    private var emptyStateView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "bicycle")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 100, height: 100)
+                .foregroundColor(.gray)
+            
+            Text("아직 운동 기록이 없습니다")
+                .customFont(.pageTitle)
+            
+            Text("새로운 운동을 시작해보세요!")
+                .customFont(.subInfoTitle)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
+    }
+    
+    private func deleteRecord(at offsets: IndexSet) {
+        let recordsToDelete = offsets.map { vm.records[$0] }
+        
+        for record in recordsToDelete {
+            vm.deleteRecord(record)
         }
     }
 }
 
-
-#Preview {
+#Preview("Empty State") {
+    
     RideHistoryView(vm: RideHistoryViewModel())
+}
+
+#Preview("Populated State") {
+    RideHistoryView(vm: mockRideHistoryViewModel())
+}
+
+
+func mockRideHistoryViewModel() -> RideHistoryViewModel {
+    let mockViewModel = RideHistoryViewModel()
+    
+    // 목 데이터 생성
+    let calendar = Calendar.current
+    let now = Date()
+    
+    // 경로 데이터 생성 헬퍼 함수
+    func generateRoute(startLat: Double, startLon: Double, pointCount: Int) -> [CLLocationCoordinate2D] {
+        var route: [CLLocationCoordinate2D] = []
+        let latVariation = 0.01
+        let lonVariation = 0.01
+        
+        for i in 0..<pointCount {
+            let progress = Double(i) / Double(pointCount - 1)
+            let lat = startLat + latVariation * sin(progress * .pi * 2)
+            let lon = startLon + lonVariation * cos(progress * .pi * 2)
+            route.append(CLLocationCoordinate2D(latitude: lat, longitude: lon))
+        }
+        
+        return route
+    }
+    
+    mockViewModel.records = [
+        RideRecord(id: "1",
+                   startTime: calendar.date(byAdding: .hour, value: -2, to: now)!,
+                   endTime: now,
+                   totalDistance: 15.5,
+                   totalRidingTime: 7200,
+                   targetSpeedLower: 15,
+                   targetSpeedUpper: 20,
+                   timeInSlowZone: 1800,
+                   timeInTargetZone: 3600,
+                   timeInFastZone: 1800,
+                   route: generateRoute(startLat: 37.5665, startLon: 126.9780, pointCount: 100)),
+        RideRecord(id: "2",
+                   startTime: calendar.date(byAdding: .day, value: -1, to: now)!,
+                   endTime: calendar.date(byAdding: .hour, value: -22, to: now)!,
+                   totalDistance: 20.3,
+                   totalRidingTime: 8100,
+                   targetSpeedLower: 18,
+                   targetSpeedUpper: 25,
+                   timeInSlowZone: 2000,
+                   timeInTargetZone: 4100,
+                   timeInFastZone: 2000,
+                   route: generateRoute(startLat: 37.5635, startLon: 126.9800, pointCount: 150)),
+        RideRecord(id: "3",
+                   startTime: calendar.date(byAdding: .day, value: -3, to: now)!,
+                   endTime: calendar.date(byAdding: .day, value: -3, to: now)!,
+                   totalDistance: 12.8,
+                   totalRidingTime: 5400,
+                   targetSpeedLower: 12,
+                   targetSpeedUpper: 18,
+                   timeInSlowZone: 1500,
+                   timeInTargetZone: 2900,
+                   timeInFastZone: 1000,
+                   route: generateRoute(startLat: 37.5715, startLon: 126.9760, pointCount: 80))
+    ]
+    
+    return mockViewModel
 }
