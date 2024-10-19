@@ -16,18 +16,10 @@ struct RideHistoryView: View {
     
     
     // Properties
-    
     @ObservedObject var vm: RideHistoryViewModel
-    
-    let record = [
-        RideHistoryModel(date: "2024. 10. 6", day: "금요일", startTime: "09:56", endTime: "14:37", distance: 452, speed: 21),
-        RideHistoryModel(date: "2024. 10. 6", day: "금요일", startTime: "09:56", endTime: "14:37", distance: 452, speed: 40),
-        RideHistoryModel(date: "2024. 10. 6", day: "금요일", startTime: "09:56", endTime: "14:37", distance: 452, speed: 5)
-    ]
     
     
     // Body
-    
     var body: some View {
         NavigationView {
             VStack(spacing: 1) {
@@ -80,19 +72,6 @@ struct RideHistoryView: View {
             }
         }
     }
-}
-
-
-    //MARK: - Model
-
-struct RideHistoryModel: Identifiable {
-    let id = UUID()
-    let date: String
-    let day: String
-    let startTime: String
-    let endTime: String
-    let distance: Int
-    let speed: Int
 }
 
 
