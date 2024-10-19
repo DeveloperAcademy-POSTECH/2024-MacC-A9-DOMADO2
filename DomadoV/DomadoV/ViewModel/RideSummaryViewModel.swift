@@ -36,7 +36,7 @@ class RideSummaryViewModel: ObservableObject, RideEventPublishable {
         
         guard let summary = self.rideSummary else { return [] }
         
-        return SpeedDistribution.calculateSpeedDistribution(speedDistribution: summary.speedDistribution, totalTime: summary.totalTime)
+        return SpeedDistribution.calculateSpeedDistribution(speedDistribution: summary.speedDistribution, totalTime: summary.totalRideTime)
     }
     
 }
