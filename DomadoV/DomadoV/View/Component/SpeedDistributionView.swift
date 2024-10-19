@@ -35,41 +35,59 @@ struct SpeedDistributionView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            GeometryReader { geometry in
-                let widths = calculateWidths(for: geometry.size.width)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: barSpacing) {
-                        ForEach(0..<segments.count, id: \.self) { index in
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(speedColors[index])
-                                .frame(width: widths[index], height: 30)
-                        }
+        VStack {
+            if segments.isEmpty {
+                emptyStateView
+            } else {
+                contentView
+            }
+        }
+        .frame(height: 90)
+        .padding(.vertical)
+    }
+    
+    private var emptyStateView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "speedometer")
+                .font(.system(size: 40))
+                .foregroundColor(.gray)
+            Text("속도 분포 데이터가 없습니다")
+                .customFont(.subInfoTitle)
+        }
+    }
+    
+    private var contentView: some View {
+        GeometryReader { geometry in
+            let widths = calculateWidths(for: geometry.size.width)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: barSpacing) {
+                    ForEach(0..<segments.count, id: \.self) { index in
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(speedColors[index])
+                            .frame(width: widths[index], height: 30)
                     }
-                    
-                    HStack(spacing: barSpacing) {
-                        ForEach(0..<segments.count, id: \.self) { index in
-                            VStack(alignment: .leading, spacing: 4) {
-                                HStack(spacing: 4) {
-                                    Text(speedLabels[index])
-                                        .customFont(.subInfoTitle)
-                                    Circle()
-                                        .fill(speedColors[index])
-                                        .frame(width: circleSize, height: circleSize)
-                                }
-                                Text(segments[index].time > 0 ? segments[index].time.formatTimeInMinutes() : "-")
-                                    .customFont(.supplementaryTimeDistanceNumber)
-                                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                }
+                
+                HStack(spacing: barSpacing) {
+                    ForEach(0..<segments.count, id: \.self) { index in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack(spacing: 4) {
+                                Text(speedLabels[index])
+                                    .customFont(.subInfoTitle)
+                                Circle()
+                                    .fill(speedColors[index])
+                                    .frame(width: circleSize, height: circleSize)
                             }
-                            .frame(width: widths[index])
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            Text(segments[index].time > 0 ? segments[index].time.formatTimeInMinutes() : "-")
+                                .customFont(.supplementaryTimeDistanceNumber)
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
                         }
+                        .frame(width: widths[index])
+                        .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
             }
-            .frame(height: 90)
-            .padding(.vertical)
         }
     }
 }
@@ -99,6 +117,14 @@ struct SpeedDistributionView_Previews: PreviewProvider {
             .padding()
             .preferredColorScheme(.dark)
             .previewDisplayName("Dark Mode with Zero Time")
+            
+            
+            SpeedDistributionView(
+                segments: []
+            )
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .previewDisplayName("No Distribution")
         }
     }
 }
