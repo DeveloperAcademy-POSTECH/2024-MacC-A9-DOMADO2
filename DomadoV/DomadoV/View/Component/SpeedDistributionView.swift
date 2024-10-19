@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SpeedDistributionView: View {
-    let segments: [(ratio: CGFloat, time: TimeInterval)]
-    let speedColors: [Color] = [.electricBlue, .lavenderPurple, .sunsetOrange ]
-    let speedLabels: [String] =  ["느림", "보통", "빠름"]
+    let segments: [(ratio: Double, time: TimeInterval)]
+    let speedColors: [Color] = [.electricBlue, .lavenderPurple, .sunsetOrange]
+    let speedLabels: [String] = ["느림", "보통", "빠름"]
     
     @Environment(\.colorScheme) private var colorScheme
     
@@ -27,10 +27,10 @@ struct SpeedDistributionView: View {
         }
         
         let remainingWidth = totalWidth - totalMinWidth
-        let totalRatio = segments.reduce(0) { $0 + $1.ratio }
+        let totalRatio = segments.reduce(0.0) { $0 + $1.ratio }
         
         return segments.map { segment in
-            minSegmentWidth + (remainingWidth * (segment.ratio / totalRatio))
+            minSegmentWidth + (remainingWidth * CGFloat(segment.ratio / totalRatio))
         }
     }
     
@@ -90,7 +90,7 @@ struct SpeedDistributionView_Previews: PreviewProvider {
 
             SpeedDistributionView(
                 segments: [
-                    (ratio: 0, time: 0),
+                    (ratio: 0.0, time: 0),
                     (ratio: 0.8, time: 3600),
                     (ratio: 0.2, time: 1800)
                 ]
