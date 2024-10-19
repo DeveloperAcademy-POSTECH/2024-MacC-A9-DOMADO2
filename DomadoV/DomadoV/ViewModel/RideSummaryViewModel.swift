@@ -31,27 +31,12 @@ class RideSummaryViewModel: ObservableObject, RideEventPublishable {
         rideSummary = rideSession.generateRideSummary()
      }
     
-    func calculateSpeedDistribution() -> [(ratio: Double, time: TimeInterval)] {
-        guard let summary = rideSummary, summary.totalTime > 0 else {
-            return []
-        }
+    /// SpeedDistribution을 이용해 각 속도 구간별 비율과 시간을 계산해서 반환합니다.
+    func getSpeedDistribution() -> [(ratio: Double, time: TimeInterval)] {
         
-        let distribution = summary.speedDistribution
-        let totalTargetTime = distribution.belowTarget + distribution.withinTarget + distribution.aboveTarget
+        guard let summary = self.rideSummary else { return [] }
         
-        guard totalTargetTime > 0 else {
-            return []
-        }
-        
-        let belowRatio = distribution.belowTarget / totalTargetTime
-        let withinRatio = distribution.withinTarget / totalTargetTime
-        let aboveRatio = distribution.aboveTarget / totalTargetTime
-        
-        return [
-            (belowRatio, summary.totalTime * belowRatio),
-            (withinRatio, summary.totalTime * withinRatio),
-            (aboveRatio, summary.totalTime * aboveRatio)
-        ]
+        return SpeedDistribution.calculateSpeedDistribution(speedDistribution: summary.speedDistribution, totalTime: summary.totalTime)
     }
     
 }
