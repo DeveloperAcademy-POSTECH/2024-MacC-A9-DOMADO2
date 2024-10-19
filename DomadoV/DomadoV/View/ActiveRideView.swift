@@ -21,71 +21,93 @@ struct ActiveRideView: View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 30) {
+            VStack(spacing: 0) {
                 speedometer
+                    .padding(.bottom, 135)
                 
-                HStack(spacing: 20) {
-                    distanceView
-                    Divider().background(Color.white)
-                    timeView
+                HStack(spacing: 0) {
+                    VStack(alignment: .leading, spacing: 45) {
+                        timeView
+                        distanceView
+                        
+                    }
+                    
+                    Spacer()
                 }
                 
-                Spacer()
-                
                 pauseButton
+                    .frame(maxHeight: .infinity, alignment: .bottom)
             }
-            .padding()
+            .frame(maxHeight: .infinity)
+            .padding(.horizontal, 30)
+            .background(Color.indigo)
         }
     }
     
     private var speedometer: some View {
-        VStack {
-            Text("Current Speed")
-                .font(.headline)
-                .foregroundColor(.white)
-            
-            Text(vm.formattedCurrentSpeed())
-                .font(.system(size: 64, weight: .bold, design: .rounded))
-                .foregroundColor(.green)
+        HStack {
+            Spacer()
+            VStack(alignment: .trailing, spacing: 0){
+                Text(vm.formattedCurrentSpeed())
+                    .font(.system(size: 64, weight: .bold, design: .rounded))
+                    .padding(.bottom, 22)
+                    .foregroundColor(.white)
+                
+                Text("현재 속도")
+                    .font(.headline)
+                    .foregroundColor(.white)
+            }
+            .padding(.top, 160)
         }
+    }
+    private var timeView: some View {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("시간")
+                    .font(.subheadline)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 10)
+                
+                Text(vm.formattedTotalRideTime())
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+
+            }
+
     }
     
     private var distanceView: some View {
-        VStack {
-            Text("Distance")
-                .font(.subheadline)
-                .foregroundColor(.white)
-            
-            Text(vm.formattedTotalDistance())
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-        }
-    }
-    
-    private var timeView: some View {
-        VStack {
-            Text("Time")
-                .font(.subheadline)
-                .foregroundColor(.white)
-            
-            Text(vm.formattedTotalRideTime())
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-        }
+            VStack(alignment: .leading, spacing: 0){
+                Text("거리")
+                    .font(.subheadline)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 10)
+                
+                Text(vm.formattedTotalDistance())
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+            }
+
     }
     
     private var pauseButton: some View {
-        Button(action: {
-            vm.pauseRide()
-        }) {
-            Text("Pause")
-                .font(.headline)
-                .foregroundColor(.black)
-                .padding()
-                .background(Color.yellow)
-                .cornerRadius(10)
+        HStack {
+            Button(action: {
+                vm.pauseRide()
+            }) {
+                Circle()
+                    .stroke(.white,lineWidth: 1)
+                    .frame(width: 104, height: 104)
+                    .overlay(
+                        Image(systemName: "pause.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 35)
+                            .foregroundColor(.white)
+                    )
+            }
+            Spacer()
         }
     }
 }
