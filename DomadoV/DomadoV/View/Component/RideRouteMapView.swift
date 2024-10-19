@@ -33,10 +33,17 @@ struct RideRouteMapView: View {
     
     var body: some View {
         if route.isEmpty {
-            Text("경로 없음")
-                .font(.title)
-                .foregroundColor(.secondary)
-                .frame(height: 300)
+            VStack(spacing: 18){
+                
+                Image(systemName: "mappin.slash")
+                    .font(.system(size: 40))
+                    .foregroundColor(.gray)
+                
+                Text("주행 경로가 없습니다")
+                    .customFont(.subInfoTitle)
+                    
+            }
+            .frame(height: 300)
         } else {
             Map(position: $position) {
                 MapPolyline(coordinates: route)
