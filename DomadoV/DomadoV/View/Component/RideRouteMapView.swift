@@ -132,30 +132,6 @@ struct RideRouteMapView: View {
     }
 }
 
-struct StartPoint: View {
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(Color.green)
-                .frame(width: 30, height: 30)
-            Image(systemName: "figure.walk")
-                .foregroundColor(.white)
-        }
-    }
-}
-
-struct EndPoint: View {
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(Color.red)
-                .frame(width: 30, height: 30)
-            Image(systemName: "flag.checkered")
-                .foregroundColor(.white)
-        }
-    }
-}
-
 struct RideRouteMapView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
