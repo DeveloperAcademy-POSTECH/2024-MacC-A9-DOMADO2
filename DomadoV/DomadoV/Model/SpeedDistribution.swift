@@ -23,3 +23,30 @@ struct SpeedDistribution {
         }
     }
 }
+
+extension SpeedDistribution {
+
+    static func calculateSpeedDistribution(speedDistribution: SpeedDistribution, totalTime: TimeInterval) -> [(ratio: Double, time: TimeInterval)] {
+        guard totalTime > 0 else {
+            return []
+        }
+        
+        let distribution = speedDistribution
+        let totalTargetTime = distribution.belowTarget + distribution.withinTarget + distribution.aboveTarget
+        
+        guard totalTargetTime > 0 else {
+            return []
+        }
+        
+        let belowRatio = distribution.belowTarget / totalTargetTime
+        let withinRatio = distribution.withinTarget / totalTargetTime
+        let aboveRatio = distribution.aboveTarget / totalTargetTime
+        
+        // (주행구간 비율, 해당구간 시간 )
+        return [
+            (belowRatio, totalTime * belowRatio),
+            (withinRatio, totalTime * withinRatio),
+            (aboveRatio, totalTime * aboveRatio)
+        ]
+    }
+}

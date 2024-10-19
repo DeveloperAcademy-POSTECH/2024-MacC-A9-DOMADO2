@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-struct RideRecord: Identifiable {
+struct RideRecord: Identifiable, Hashable{
     let id: String
     let startTime: Date
     let endTime: Date
@@ -22,7 +22,8 @@ struct RideRecord: Identifiable {
     let route: [CLLocationCoordinate2D]
     
     var averageSpeed: Double {
-        return totalDistance / (totalRidingTime / 3600) // km/h
+        guard totalRidingTime > 0 else { return 0 }
+        return totalDistance / (Double(totalRidingTime) / 3600.0) // km/h
     }
     
     var totalDuration: TimeInterval {
@@ -55,5 +56,13 @@ struct RideRecord: Identifiable {
         self.timeInTargetZone = timeInTargetZone
         self.timeInFastZone = timeInFastZone
         self.route = route
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: RideRecord, rhs: RideRecord) -> Bool {
+        return lhs.id == rhs.id
     }
 }

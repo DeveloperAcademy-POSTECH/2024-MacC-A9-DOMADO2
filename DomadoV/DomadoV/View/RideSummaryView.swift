@@ -16,11 +16,7 @@ import SwiftUI
 /// 5. 닫기 버튼을 눌러 주행준비 화면으로 돌아갑니다.
 struct RideSummaryView: View {
     @ObservedObject var vm: RideSummaryViewModel
-    
-    private let speedLabels = ["목표 속도 미만", "목표 속도 내", "목표 속도 초과"]
-    private let speedColors: [Color] = [.blue, .green, .red]
-    private let barSpacing: CGFloat = 4
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("주행 요약")
@@ -29,11 +25,11 @@ struct RideSummaryView: View {
             if let summary = vm.rideSummary {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("총 거리: \(summary.totalDistance, specifier: "%.2f") km")
-                    Text("총 시간: \(vm.formatTime(summary.totalTime))")
+                    Text("총 시간: \(summary.totalTime.formatTime())")
                     
                     
-                    Text("총 주행시간: \(vm.formatTime(summary.totalRideTime)) ")
-                    Text("총 휴식 시간: \(vm.formatTime(summary.totalRestTime))")
+                    Text("총 주행시간: \(summary.totalRideTime.formatTime())")
+                    Text("총 휴식 시간: \(summary.totalRestTime.formatTime())")
                     
                     
                     Text("평균 속도: \(summary.averageSpeed, specifier: "%.1f") km/h")
@@ -44,53 +40,10 @@ struct RideSummaryView: View {
                     .font(.headline)
                     .padding(.top)
                 
-                let segments = vm.calculateSpeedDistribution()
+                // MARK: 속도분포
+                SpeedDistributionView(segments: vm.getSpeedDistribution())
+               
                 
-                GeometryReader { geometry in
-                    VStack(alignment: .leading, spacing: 0) {
-                        HStack(spacing: barSpacing) {
-                            ForEach(0..<segments.count, id: \.self) { index in
-                                VStack(spacing: 4) {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(speedColors[index])
-                                        .frame(width: (geometry.size.width - CGFloat(segments.count - 1) * barSpacing) * segments[index].ratio, height: 30)
-                                    
-                                    Text(vm.formatTime(segments[index].time))
-                                        .font(.caption)
-                                        .foregroundColor(.black)
-                                }
-                            }
-                        }
-                        
-                        HStack(spacing: 0) {
-                            ForEach(0..<segments.count, id: \.self) { index in
-                                Text(speedLabels[index])
-                                    .font(.caption)
-                                    .frame(width: (geometry.size.width - CGFloat(segments.count - 1) * barSpacing) * segments[index].ratio)
-                                    .multilineTextAlignment(.center)
-                                
-                                if index < segments.count - 1 {
-                                    Spacer().frame(width: barSpacing)
-                                }
-                            }
-                        }
-                        .padding(.top, 4)
-                    }
-                }
-                .frame(height: 80)
-                .padding(.vertical)
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    ForEach(0..<segments.count, id: \.self) { index in
-                        HStack {
-                            Circle()
-                                .fill(speedColors[index])
-                                .frame(width: 10, height: 10)
-                            Text("\(speedLabels[index]): \(vm.formatTime(segments[index].time)) (\(Int(segments[index].ratio * 100))%)")
-                        }
-                    }
-                }
-                .padding(.top)
             } else {
                 Text("주행 요약 정보를 불러오는 중...")
             }
