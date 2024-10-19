@@ -21,4 +21,15 @@ extension TimeInterval {
         
         return "\(hoursString):\(minutesString):\(secondsString)"
     }
+    
+    func formatTimeInMinutes() -> String {
+        let hours = Int(self) / 3600
+        let minutes = (Int(self) % 3600) / 60
+        
+        if hours > 0 {
+            return String(format: "%d시간 %02d분", hours, minutes)
+        } else {
+            return String(format: "%d분", minutes)
+        }
+    }
 }
