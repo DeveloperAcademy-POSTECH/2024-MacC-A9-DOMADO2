@@ -9,44 +9,90 @@ import SwiftUI
 
 
 struct RideDetailView: View {
+    
+    var ride: RideRecord
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
         ScrollView {
+            
             VStack(alignment: .leading, spacing: 10) {
                 headerView
+                    .padding(.top, 10)
                 mapPlaceholder
-                AverageSpeedView()
+                    .padding(.top, 10)
+                    .padding(.bottom, 22)
+                
+                AverageSpeedView(avgSpeed: ride.averageSpeed)
                     .padding(.vertical, 12)
-                InfoRow(label: "거리", value: "246 km")
+                
+                SpeedDistributionView(segments: SpeedDistribution.calculateSpeedDistribution(speedDistribution: SpeedDistribution(belowTarget: ride.timeInSlowZone, withinTarget: ride.timeInTargetZone, aboveTarget: ride.timeInSlowZone), totalTime: ride.totalRidingTime))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                
+                InfoRow(label: "거리", value: ride.totalDistance.formatToDecimal(1) + " km")
                     .padding(.vertical, 16)
-                InfoRow(label: "총 시간", value: "02:57:58")
+                InfoRow(label: "총 시간", value: ride.totalDuration.formatTime())
                     .padding(.vertical, 19)
                 timeInfoView
+                
             }
             .padding(.horizontal, 30)
         }
+        .scrollIndicators(.hidden)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("운동기록")
+                    }
+                    .foregroundColor(.midnightCharcoal) 
+                }
+            }
+        }
     }
+    
+    
+    private var customBackButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                Text("운동기록")
+                    .customFont(.pageTitle)
+            }
+            .foregroundColor(.midnightCharcoal)
+        }
+    }
+    
     
     // MARK: - Header View
     
     private var headerView: some View {
         HStack {
-            Text("2024. 10. 6 금요일")
-                .customFont(.infoTitle)
+            Text(ride.startTime.formatAsKoreanDate(option: .dateAndDayOfWeek))
+                .customFont(.listNumber)
             Spacer()
             Image(systemName: "clock")
                 .customFont(.listNumber)
-            Text("09:56 - 14:37")
+            Text("\(ride.startTime.formatAsKoreanTime(option: .hourMinute)) - \(ride.endTime.formatAsKoreanTime(option: .hourMinute))")
                 .customFont(.listNumber)
         }
         .foregroundColor(.midnightCharcoal)
     }
     
+    
+
     // MARK: - Map Placeholder
     
     private var mapPlaceholder: some View {
-        Rectangle()
-            .fill(Color.gray.opacity(0.2))
-            .frame(width: 333, height: 268)
+        
+        RideRouteMapView(route: ride.route)
+            .frame(maxHeight: 268)
             .frame(maxWidth: .infinity, alignment: .center)
     }
     
@@ -54,8 +100,8 @@ struct RideDetailView: View {
     
     private var timeInfoView: some View {
         HStack(spacing: 50) {
-            InfoColumn(label: "주행시간", value: "02:13:34")
-            InfoColumn(label: "휴식시간", value: "00:44:26")
+            InfoColumn(label: "주행시간", value: ride.totalRidingTime.formatTime())
+            InfoColumn(label: "휴식시간", value: ride.totalRestTime.formatTime())
         }
         .padding(.vertical, -4)
     }
@@ -64,58 +110,15 @@ struct RideDetailView: View {
 // MARK: - AverageSpeedView
 
 struct AverageSpeedView: View {
+    
+    var avgSpeed: Double
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("평균 속도")
                 .customFont(.infoTitle)
-            Text("21 km/h")
+            Text(avgSpeed.formatToDecimal(0) + " km/h")
                 .customFont(.baseTimeDistanceNumber)
-            SpeedBarView()
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.vertical, 7)
-        }
-    }
-}
-
-// MARK: - SpeedBarView
-
-struct SpeedBarView: View {
-    var body: some View {
-        VStack(spacing: 10) {
-            speedBar
-            speedCategories
-        }
-    }
-    
-    
-    //Speed Bar
-    
-    private var speedBar: some View {
-        HStack(spacing: 8) {
-            RoundedRectangle(cornerRadius: 5)
-                .fill(Color.electricBlue)
-                .frame(width: 317 * 0.2)
-            RoundedRectangle(cornerRadius: 5)
-                .fill(Color.lavenderPurple)
-                .frame(width: 317 * 0.6)
-            RoundedRectangle(cornerRadius: 5)
-                .fill(Color.sunsetOrange)
-                .frame(width: 317 * 0.2)
-        }
-        .frame(width: 317, height: 17)
-    }
-    
-    
-    //Speed Categories
-    
-    private var speedCategories: some View {
-        HStack(spacing: 8) {
-            SpeedCategoryView(label: "느려", time: "22m", color: .electricBlue)
-                .frame(width: 317 * 0.2)
-            SpeedCategoryView(label: "적정", time: "1h 10m", color: .lavenderPurple)
-                .frame(width: 317 * 0.6)
-            SpeedCategoryView(label: "빨라", time: "32m", color: .sunsetOrange)
-                .frame(width: 317 * 0.2)
         }
     }
 }
@@ -143,7 +146,6 @@ struct SpeedCategoryView: View {
         }
     }
 }
-
 // MARK: - InfoRow
 
 struct InfoRow: View {
@@ -179,8 +181,34 @@ struct InfoColumn: View {
 }
 
 
+#Preview("noPath") {
+    RideDetailView(ride: RideRecord(
+        startTime: Date(),
+        endTime: Date().addingTimeInterval(3600), // 1 hour later
+        totalDistance: 25.5,
+        totalRidingTime: 3300, // 55 minutes
+        targetSpeedLower: 10,
+        targetSpeedUpper: 25,
+        timeInSlowZone: 600,
+        timeInTargetZone: 2400,
+        timeInFastZone: 300,
+        route: []
+    ))
+    
 
+}
 
-#Preview {
-    RideDetailView()
+#Preview("noDistribution"){
+    RideDetailView(ride: RideRecord(
+        startTime: Date(),
+        endTime: Date().addingTimeInterval(3600), // 1 hour later
+        totalDistance: 25.5,
+        totalRidingTime: 3300, // 55 minutes
+        targetSpeedLower: 10,
+        targetSpeedUpper: 25,
+        timeInSlowZone: 0,
+        timeInTargetZone: 0,
+        timeInFastZone: 0,
+        route: []
+    ))
 }
