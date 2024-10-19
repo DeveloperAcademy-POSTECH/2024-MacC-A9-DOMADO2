@@ -9,8 +9,7 @@ import SwiftUI
 
 struct RideHistoryCell: View {
     
-    let workout: RideHistoryModel
-    
+    let ride: RideRecord
     
     var body: some View {
         HStack {
@@ -26,9 +25,9 @@ struct RideHistoryCell: View {
     
     private var workoutInfo: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(workout.date)
+            Text(ride.startTime.formatAsKoreanDate(option: .dateOnly))
                 .customFont(.supplementaryTimeDistanceNumber)
-            Text(workout.day)
+            Text(ride.startTime.formatAsKoreanDate(option: .dayOfWeekOnly))
                 .customFont(.infoTitle)
                 .foregroundColor(.midnightCharcoal)
             
@@ -39,14 +38,13 @@ struct RideHistoryCell: View {
         }
     }
     
-    
-    
+
     private var timeInfo: some View {
         HStack(spacing: 2) {
             Image(systemName: "clock")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
-            Text("\(workout.startTime) - \(workout.endTime)")
+            Text("\(ride.startTime.formatAsKoreanTime(option: .hourMinute)) - \(ride.endTime.formatAsKoreanTime(option: .hourMinute))")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
         }
@@ -57,7 +55,7 @@ struct RideHistoryCell: View {
             Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
-            Text("\(workout.distance) km")
+            Text("\(Int(ride.totalDistance)) km")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
         }
@@ -68,9 +66,9 @@ struct RideHistoryCell: View {
     
     private var speedInfo: some View {
         HStack(alignment: .lastTextBaseline, spacing: 1) {
-            Text("\(workout.speed)")
+            Text("\(Int(ride.averageSpeed))")
                 .customFont(.baseTimeDistanceNumber)
-                .foregroundColor(speedColor(speed: workout.speed))
+                .foregroundColor(speedColor(speed: ride.averageSpeed))
             VStack(alignment: .leading, spacing: 0) {
                 Text("km/h")
                     .customFont(.listNumber)
@@ -90,7 +88,7 @@ struct RideHistoryCell: View {
 
     //MARK: - Speedcolor
     
-    private func speedColor(speed: Int) -> Color {
+    private func speedColor(speed: Double) -> Color {
         switch speed {
         case 0...20: return .electricBlue
         case 21...35: return .lavenderPurple
@@ -100,6 +98,25 @@ struct RideHistoryCell: View {
 }
 
 
-#Preview {
-    RideHistoryCell(workout: RideHistoryModel(date: "2024. 10. 6", day: "금요일", startTime: "09:56", endTime: "14:37", distance: 452, speed: 21))
+struct RideHistoryCell_Previews: PreviewProvider {
+    static var previews: some View {
+        let sampleRide = RideRecord(
+            startTime: Date(),
+            endTime: Date().addingTimeInterval(3600), // 1 hour later
+            totalDistance: 25.5,
+            totalRidingTime: 3300, // 55 minutes
+            targetSpeedLower: 15,
+            targetSpeedUpper: 25,
+            timeInSlowZone: 600,
+            timeInTargetZone: 2400,
+            timeInFastZone: 300,
+            route: []
+        )
+        
+        return VStack {
+            RideHistoryCell(ride: sampleRide)
+        }
+        .previewLayout(.sizeThatFits)
+    }
 }
+
