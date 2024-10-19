@@ -55,7 +55,7 @@ struct RideHistoryCell: View {
             Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
-            Text("\(Int(ride.totalDistance)) km")
+            Text("\(ride.totalDistance.formatToDecimal(1)) km")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
         }
