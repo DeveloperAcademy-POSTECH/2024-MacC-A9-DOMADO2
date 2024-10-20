@@ -111,7 +111,7 @@ struct PauseRideView: View {
                 .frame(width: 40, height: 40)
                 .foregroundColor(isLongPressing ? .white : .gray)
                 .frame(width: 104, height: 104)
-                .background(isLongPressing ? Color.gray : Color.white)
+                .background(isLongPressing ? Color.gray : Color.clear)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color.gray, lineWidth: 2))
                 .scaleEffect(isLongPressing ? 0.9 : 1.0)
