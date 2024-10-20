@@ -61,7 +61,8 @@ class RideHistoryManager {
     func fetchAllRides() -> [RideRecord] {
         let context = coreDataManager.mainContext
         let fetchRequest: NSFetchRequest<Ride> = Ride.fetchRequest()
-        
+        let sortDescriptor = NSSortDescriptor(key: "startTime", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         do {
             let rides = try context.fetch(fetchRequest)
             return rides.map { ride in
