@@ -80,7 +80,7 @@ struct PauseRideView: View {
             Text("휴식 시간")
                 .customFont(.infoTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
-            Text("12:45")
+            Text(vm.restTime.formatTime())
                 .customFont(.paceSettingNumber)
                 .frame(maxWidth: .infinity, alignment: .center)
         }
