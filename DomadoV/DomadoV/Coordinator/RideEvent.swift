@@ -9,7 +9,9 @@
 ///
 /// AppCoordinator는 다음 event들을 구독하여 뷰를 교체합니다.
 enum RideEvent {
-    /// 준비화면 -> 주행화면
+    /// 준비화면 -> 카운트다운화면
+    case didStartCountdown
+    /// 카운트다운화면 -> 주행화면
     case didStartRide
     /// 주행화면 -> 정지화면
     case didPauseRide
