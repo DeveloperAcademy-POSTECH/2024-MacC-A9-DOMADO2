@@ -52,7 +52,7 @@ struct PauseRideView: View {
                     .customFont(.infoTitle)
                 Spacer()
             }
-            Text("105 km")
+            Text(vm.currentDistance.formatToDecimal(2) + " km")
                 .customFont(.baseTimeDistanceNumber)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -67,7 +67,7 @@ struct PauseRideView: View {
                 Text("시간")                                .customFont(.infoTitle)
                 Spacer()
             }
-            Text("01:30:27")
+            Text(vm.currentRidingTime.formatTime())
                 .customFont(.baseTimeDistanceNumber)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -80,7 +80,7 @@ struct PauseRideView: View {
             Text("휴식 시간")
                 .customFont(.infoTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
-            Text("12:45")
+            Text(vm.restTime.formatTime())
                 .customFont(.paceSettingNumber)
                 .frame(maxWidth: .infinity, alignment: .center)
         }

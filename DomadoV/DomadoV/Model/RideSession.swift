@@ -23,7 +23,9 @@ class RideSession {
     private(set) var endTime: Date?
     private(set) var locations: [LocationData] = []
     private(set) var restPeriods: [RestPeriod] = []
-    private(set) var totalRestTime: TimeInterval = 0
+    var totalRestTime: TimeInterval {
+        return calculateTotalRestTime()
+    }
     private var averageSpeed: Double {
         let effectiveRideTime = totalRideTime > 0 ? totalRideTime : 1
         return totalDistance / (effectiveRideTime / 3600)
@@ -129,7 +131,6 @@ class RideSession {
         if var restPeriod = currentRestPeriod {
             restPeriod.endTime = Date()
             restPeriods.append(restPeriod)
-            totalRestTime += restPeriod.duration
             currentRestPeriod = nil
         }
         state = .active
@@ -141,6 +142,12 @@ class RideSession {
     func stop() {
         guard state == .pause else { return }
         endTime = Date()
+        // 마지막 휴식 기간 처리
+        if var restPeriod = currentRestPeriod {
+            restPeriod.endTime = endTime
+            restPeriods.append(restPeriod)
+            currentRestPeriod = nil
+        }
         state = .summary
         LocationManager.shared.stopUpdatingLocation()
         stopTimer()
@@ -157,6 +164,14 @@ class RideSession {
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
+    }
+    
+    private func calculateTotalRestTime() -> TimeInterval {
+        let completedRestTime = restPeriods.reduce(0) { $0 + $1.duration }
+        if let currentRest = currentRestPeriod {
+            return completedRestTime + currentRest.duration
+        }
+        return completedRestTime
     }
     
     private func updateTotalRideTime() {
