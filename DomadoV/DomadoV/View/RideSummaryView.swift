@@ -23,122 +23,141 @@ struct RideSummaryView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            VStack(spacing: 0) {
-                HStack {
-                    ZStack {
-                        Text("라이딩 종료")
+            HStack {
+                ZStack {
+                    Text("라이딩 종료")
+                        .customFont(.pageTitle)
+                    
+                    HStack {
+                        Spacer()
                         
-                        HStack {
-                            Spacer()
-                            
-                            Button {
-                                vm.dismissSummary()
-                            } label: {
-                                Image(systemName: "multiply")
-                            }
+                        Button {
+                            vm.dismissSummary()
+                        } label: {
+                            Image(systemName: "multiply")
+                                .customFont(.pageTitle)
                         }
                     }
                 }
-                .frame(height: 42)
-                .padding(.bottom, 22)
-                
-                if let summary = vm.rideSummary {
-                    HStack {
-                        Text("평균 속도")
-                        Spacer()
-                    }
-                    .padding(.bottom, 22)
-                    
-                    HStack {
-                        Spacer()
-                        Text("\(summary.averageSpeed, specifier: "%.1f")")
-                        Text("km/h")
-                        
-                    }
-                    .padding(.bottom, 45)
-                    
-                    // 속도 구간별 주행 시간
-                    let segments = vm.calculateSpeedDistribution()
-                    
-                    GeometryReader { geometry in
-                        VStack(alignment: .leading, spacing: 0) {
-                            HStack(spacing: barSpacing) {
-                                ForEach(0..<segments.count, id: \.self) { index in
-                                    VStack(spacing: 0) {
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .fill(speedColors[index])
-                                            .frame(width: (geometry.size.width - CGFloat(segments.count - 1) * barSpacing) * segments[index].ratio, height: 17)
-                                            .padding(.bottom, 17)
-                                        
-                                        VStack(alignment: .leading, spacing: 0){
-                                            HStack(spacing: 6) {
-                                                Text("\(speedLabels[index])")
-                                                    .customFont(.subInfoTitle)
-                                                Circle()
-                                                    .fill(speedColors[index])
-                                                    .frame(width: 7, height: 7)
-                                            }
-                                            .padding(.bottom, 10)
-                                            
-                                            
-                                            Text("\(vm.formatTime(segments[index].time))")
-                                            //                                            Text("(\(Int(segments[index].ratio * 100))%)")
-                                        }
-                                    }
-                                    
-                                }
-                            }
-                            
-                        }
-                    }
-                    .frame(height: 80)
-                    .padding(.vertical)
-                    
-                    
-                    VStack(alignment: .leading, spacing: 0){
-                        Text("총 시간")
-                            .padding(.bottom, 10)
-                        Text("\(vm.formatTime(summary.totalTime))")
-                            .padding(.bottom, 24)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 0){
-                                Text("총 주행시간")
-                                    .padding(.bottom, 8)
-                                Text("\(vm.formatTime(summary.totalRideTime)) ")
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 0){
-                                Text("총 휴식 시간")
-                                    .padding(.bottom, 8)
-                                Text("\(vm.formatTime(summary.totalRestTime))")
-                            }
-                            .padding(.horizontal, 40)
-                        }
-                        
-                    }
-                    .padding(.vertical, 70)
-                    
-                    HStack {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("총 거리")
-                                .padding(.bottom, 10)
-                            Text("\(summary.totalDistance, specifier: "%.2f") km")
-                        }
-                        
-                        Spacer()
-                    }
-                    
-                } else {
-                    Text("주행 요약 정보를 불러오는 중...")
-                }
-                
-                Spacer()
             }
-            .frame(maxHeight: .infinity)
+            .frame(height: 42)
+            .background(Color.white)
+            .padding(.bottom, 22)
+            
+            ScrollView {
+                VStack(spacing: 0) {
+                    if let summary = vm.rideSummary {
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("평균 속도")
+                                    .customFont(.infoTitle)
+                                Spacer()
+                            }
+                            .padding(.bottom, 22)
+                            
+                            HStack (alignment: .bottom, spacing: 0){
+                                Spacer()
+                                Text("\(summary.averageSpeed, specifier: "%.f")")
+                                    .customFont(.mainNumber)
+                                    .offset(y: 37)
+                                
+                                Text("km/h")
+                                    .customFont(.supplementaryTimeDistanceNumber)
+                                
+                            }
+                            .padding(.bottom, -29)
+                            .offset(y: -74)
+                            //                            .padding(.bottom, 45)
+                        }
+                        
+                        // 속도 구간별 주행 시간
+                        let segments = vm.calculateSpeedDistribution()
+                        
+                        GeometryReader { geometry in
+                            VStack(alignment: .leading, spacing: 0) {
+                                HStack(spacing: barSpacing) {
+                                    ForEach(0..<segments.count, id: \.self) { index in
+                                        VStack(spacing: 0) {
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .fill(speedColors[index])
+                                                .frame(width: (geometry.size.width - CGFloat(segments.count - 1) * barSpacing) * segments[index].ratio, height: 17)
+                                                .padding(.bottom, 17)
+                                            
+                                            VStack(alignment: .leading, spacing: 0){
+                                                HStack(spacing: 6) {
+                                                    Text("\(speedLabels[index])")
+                                                        .customFont(.subInfoTitle)
+                                                    Circle()
+                                                        .fill(speedColors[index])
+                                                        .frame(width: 7, height: 7)
+                                                }
+                                                .padding(.bottom, 10)
+                                                
+                                                
+                                                Text("\(vm.formatTime(segments[index].time))")
+                                                    .customFont(.supplementaryTimeDistanceNumber)
+                                                //                                            Text("(\(Int(segments[index].ratio * 100))%)")
+                                            }
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            }
+                        }
+                        .frame(height: 80)
+                        //                        .padding(.vertical)
+                        
+                        VStack(alignment: .leading, spacing: 0){
+                            Text("총 시간")
+                                .customFont(.infoTitle)
+                                .padding(.bottom, 10)
+                            Text("\(vm.formatTime(summary.totalTime))")
+                                .customFont(.baseTimeDistanceNumber)
+                                .padding(.bottom, 24)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            HStack {
+                                VStack(alignment: .leading, spacing: 0){
+                                    Text("주행시간")
+                                        .customFont(.subInfoTitle)
+                                        .padding(.bottom, 8)
+                                    Text("\(vm.formatTime(summary.totalRideTime)) ")
+                                        .customFont(.supplementaryTimeDistanceNumber)
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 0){
+                                    Text("휴식시간")
+                                        .customFont(.subInfoTitle)
+                                        .padding(.bottom, 8)
+                                    Text("\(vm.formatTime(summary.totalRestTime))")
+                                        .customFont(.supplementaryTimeDistanceNumber)
+                                }
+                                .padding(.horizontal, 40)
+                            }
+                            
+                        }
+                        .padding(.vertical, 70)
+                        
+                        HStack {
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text("거리")
+                                    .customFont(.infoTitle)
+                                    .padding(.bottom, 10)
+                                Text("\(summary.totalDistance, specifier: "%.2f") km")
+                                    .customFont(.baseTimeDistanceNumber)
+                            }
+                            
+                            Spacer()
+                        }
+                        
+                    } else {
+                        Text("주행 요약 정보를 불러오는 중...")
+                    }
+                }
+            }
         }
-        .padding([.horizontal, .bottom], 30)
+        .padding(.horizontal, 30)
         .onAppear {
             vm.getSummary()
         }
