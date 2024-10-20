@@ -17,78 +17,87 @@ struct ActiveRideView: View {
     
     @ObservedObject var vm: ActiveRideViewModel
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
+        VStack(spacing: 0) {
+            speedometer
+                .padding(.bottom, 135)
             
-            VStack(spacing: 0) {
-                speedometer
-                    .padding(.bottom, 135)
-                
-                HStack(spacing: 0) {
-                    VStack(alignment: .leading, spacing: 45) {
-                        timeView
-                        distanceView
-                        
-                    }
-                    
-                    Spacer()
+            
+            HStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 45) {
+                    timeView
+                    distanceView
                 }
-                
-                pauseButton
-                    .frame(maxHeight: .infinity, alignment: .bottom)
+                Spacer()
             }
-            .frame(maxHeight: .infinity)
-            .padding(.horizontal, 30)
-            .background(Color.indigo)
+            .padding(.bottom, 50)
+            
+            pauseButton
         }
+        .padding([.horizontal, .bottom], 30)
+        .background(
+            // 페이스 기준 현재 속도에 따라 색상 변경
+            colorScheme == .dark ? .lavenderPurpleDark : .lavenderPurple
+        )
     }
     
     private var speedometer: some View {
         HStack {
             Spacer()
             VStack(alignment: .trailing, spacing: 0){
-                Text(vm.formattedCurrentSpeed())
-                    .font(.system(size: 64, weight: .bold, design: .rounded))
-                    .padding(.bottom, 22)
-                    .foregroundColor(.white)
+                HStack (alignment: .bottom, spacing: 0){
+                    Text(vm.formattedCurrentSpeed())
+                        .customFont(.mainNumber)
+                        .offset(y: 37)
+                        .foregroundColor(.white)
+                    
+                    Text("km/h")
+                        .customFont(.supplementaryTimeDistanceNumber)
+                        .foregroundColor(.white)
+                }
+                .offset(y: -74)
+                .padding(.bottom, -62)
                 
                 Text("현재 속도")
-                    .font(.headline)
+                    .customFont(.infoTitle)
                     .foregroundColor(.white)
             }
             .padding(.top, 160)
+            
+            
         }
     }
     private var timeView: some View {
-            VStack(alignment: .leading, spacing: 0) {
-                Text("시간")
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                    .padding(.bottom, 10)
-                
-                Text(vm.formattedTotalRideTime())
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-
-            }
-
+        VStack(alignment: .leading, spacing: 0) {
+            Text("시간")
+                .customFont(.infoTitle)
+                .foregroundColor(.white)
+                .padding(.bottom, 6)
+            
+            Text(vm.formattedTotalRideTime())
+                .customFont(.baseTimeDistanceNumber)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+            
+        }
+        
     }
     
     private var distanceView: some View {
-            VStack(alignment: .leading, spacing: 0){
-                Text("거리")
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                    .padding(.bottom, 10)
-                
-                Text(vm.formattedTotalDistance())
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-            }
-
+        VStack(alignment: .leading, spacing: 0){
+            Text("거리")
+                .customFont(.infoTitle)
+                .foregroundColor(.white)
+                .padding(.bottom, 6)
+            
+            Text(vm.formattedTotalDistance())
+                .customFont(.baseTimeDistanceNumber)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+        }
+        
     }
     
     private var pauseButton: some View {
