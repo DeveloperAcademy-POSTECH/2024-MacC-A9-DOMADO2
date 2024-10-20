@@ -103,10 +103,14 @@ class RideSession {
             .eraseToAnyPublisher()
     }
     
+    /// 목표 속도 범위 설정
+    func setTargetSpeedRange(_ range: ClosedRange<Double>) {
+        targetSpeedRange = range
+    }
+    
     /// 주행시작
-    func start(settedtargetSpeedRange: ClosedRange<Double>) {
+    func start() {
         guard state == .preparation else { return }
-        targetSpeedRange = settedtargetSpeedRange
         startTime = Date()
         state = .active
         startTimer()

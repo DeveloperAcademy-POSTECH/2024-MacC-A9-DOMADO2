@@ -32,6 +32,8 @@ class AppCoordinator: ObservableObject{
     /// viewModel로부터 Event를 받아 화면을 전환합니다.
     private func handleRideEvent(_ event: RideEvent) {
         switch event {
+        case .didStartCountdown:
+            currentView = .countdown
         case .didStartRide:
             currentView = .active
         case .didPauseRide:

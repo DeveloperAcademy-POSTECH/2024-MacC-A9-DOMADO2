@@ -22,6 +22,12 @@ struct ContentView: View {
                 .onAppear{
                     coordinator.rideSession = rideSession
                     coordinator.bind(to: vm)}
+        case .countdown:
+            if let rideSession = coordinator.rideSession {
+                let vm = CountdownViewModel(rideSession: rideSession)
+                CountdownView(vm: vm)
+                    .onAppear{coordinator.bind(to: vm)}
+            }
         case .active:
             if let rideSession = coordinator.rideSession {
                 let vm = ActiveRideViewModel(rideSession: rideSession)

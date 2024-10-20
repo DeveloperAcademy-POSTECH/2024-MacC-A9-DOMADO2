@@ -9,6 +9,8 @@
 enum AppView {
     /// 주행 시작
     case preparation
+    /// 카운트 다운
+    case countdown
     /// 주행 중
     case active
     /// 주행 정지
