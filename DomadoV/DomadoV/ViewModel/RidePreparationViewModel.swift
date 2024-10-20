@@ -35,8 +35,8 @@ class RidePreparationViewModel: ObservableObject, RideEventPublishable {
             showLocationPermissionAlert = true
             return
         }
-        rideEventSubject.send(.didStartRide)
-        rideSession.start(settedtargetSpeedRange: userSettingTargetSpeedRange)
+        rideSession.setTargetSpeedRange(userSettingTargetSpeedRange)
+        rideEventSubject.send(.didStartCountdown)       
     }
     
     /// 주행기록을 보여줍니다.
