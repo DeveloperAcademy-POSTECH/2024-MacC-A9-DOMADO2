@@ -22,12 +22,12 @@ struct PauseRideView: View {
     @State private var isLongPressing = false
     
     var body: some View {
-            ZStack {
-                mainContent
-                if showAlert { alertView }
-
-
-            }
+        ZStack {
+            mainContent
+            if showAlert { alertView }
+            
+            
+        }
     }
     
     // MARK: - Main Content
@@ -46,7 +46,7 @@ struct PauseRideView: View {
     // MARK: - Distance Section
     
     private var distanceSection: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 8) {
             HStack {
                 Text("거리")
                     .customFont(.infoTitle)
@@ -62,7 +62,7 @@ struct PauseRideView: View {
     // MARK: - Time Section
     
     private var timeSection: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 8) {
             HStack {
                 Text("시간")                                .customFont(.infoTitle)
                 Spacer()
@@ -76,7 +76,7 @@ struct PauseRideView: View {
     // MARK: - Rest Time Section
     
     private var restTimeSection: some View {
-        VStack(spacing: 17) {
+        VStack(spacing: 15) {
             Text("휴식 시간")
                 .customFont(.infoTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -137,14 +137,19 @@ struct PauseRideView: View {
             vm.resumeRide()
         } label: {
             
-            Image(systemName: "play.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 40, height: 40)
-                .foregroundColor(.white)
-                .frame(width: 104, height: 104)
-                .background(Color.lavenderPurple)
-                .clipShape(Circle())
+            ZStack {
+                Circle()
+                    .fill(Color.lavenderPurple)
+                    .frame(width: 104, height: 104)
+                
+                Image(systemName: "play.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .offset(x: 4, y: 0)
+                    .foregroundColor(.white)
+            }
+            
         }
     }
     
@@ -187,10 +192,10 @@ struct PauseRideView: View {
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
-      
+        
     }
 }
-    
+
 #Preview {
     PauseRideView(vm: PauseRideViewModel(rideSession: RideSession()))
 }
