@@ -41,7 +41,7 @@ class RideSession {
     private var filteredSpeed: Double = 0.0
     private let filterFactor: Double = 0.3
     private var lastLocationUpdateTime: Date?
-    private var speedCheckInterval: TimeInterval = 1.8
+    private var speedCheckInterval: TimeInterval = 2.0
     
     let rideHistoryManager: RideHistoryManager
     
