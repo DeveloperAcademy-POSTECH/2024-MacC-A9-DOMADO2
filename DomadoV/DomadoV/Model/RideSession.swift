@@ -27,8 +27,7 @@ class RideSession {
         return calculateTotalRestTime()
     }
     private var averageSpeed: Double {
-        let effectiveRideTime = totalRideTime > 0 ? totalRideTime : 1
-        return totalDistance / (effectiveRideTime / 3600)
+        return totalRideTime > 0 && totalDistance > 0 ? totalDistance / (totalRideTime / 3600) : 0
     }
     
     private var currentRestPeriod: RestPeriod?
@@ -41,7 +40,7 @@ class RideSession {
     private var filteredSpeed: Double = 0.0
     private let filterFactor: Double = 0.3
     private var lastLocationUpdateTime: Date?
-    private var speedCheckInterval: TimeInterval = 1.8
+    private var speedCheckInterval: TimeInterval = 2.0
     
     let rideHistoryManager: RideHistoryManager
     
