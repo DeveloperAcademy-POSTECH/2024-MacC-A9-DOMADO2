@@ -14,8 +14,8 @@ struct SpeedDistributionView: View {
     
     @Environment(\.colorScheme) private var colorScheme
     
-    private let barSpacing: CGFloat = 4
-    private let circleSize: CGFloat = 8
+    private let barSpacing: CGFloat = 8
+    private let circleSize: CGFloat = 7
     private let minSegmentWidth: CGFloat = 60 // 최소 세그먼트 너비
     
     private func calculateWidths(for size: CGFloat) -> [CGFloat] {
@@ -43,7 +43,6 @@ struct SpeedDistributionView: View {
             }
         }
         .frame(height: 90)
-        .padding(.vertical)
     }
     
     private var emptyStateView: some View {
@@ -60,31 +59,32 @@ struct SpeedDistributionView: View {
         GeometryReader { geometry in
             let widths = calculateWidths(for: geometry.size.width)
             
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: barSpacing) {
                     ForEach(0..<segments.count, id: \.self) { index in
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(speedColors[index])
-                            .frame(width: widths[index], height: 30)
-                    }
-                }
-                
-                HStack(spacing: barSpacing) {
-                    ForEach(0..<segments.count, id: \.self) { index in
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack(spacing: 4) {
-                                Text(speedLabels[index])
-                                    .customFont(.subInfoTitle)
-                                Circle()
-                                    .fill(speedColors[index])
-                                    .frame(width: circleSize, height: circleSize)
+                        VStack (spacing: 0) {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(speedColors[index])
+                                .frame(width: widths[index], height: 17)
+                                .padding(.bottom, 17)
+                            
+                            VStack(alignment: .leading, spacing: 0){
+                                HStack(spacing: 6) {
+                                    Text(speedLabels[index])
+                                        .customFont(.subInfoTitle)
+                                        .foregroundStyle(.midnightCharcoal)
+                                    Circle()
+                                        .fill(speedColors[index])
+                                        .frame(width: circleSize, height: circleSize)
+                                }
+                                .padding(.bottom, 10)
+                                
+                                Text(segments[index].time > 0 ? segments[index].time.formatTimeInMinutes() : "-")
+                                    .customFont(.supplementaryTimeDistanceNumber)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                                
                             }
-                            Text(segments[index].time > 0 ? segments[index].time.formatTimeInMinutes() : "-")
-                                .customFont(.supplementaryTimeDistanceNumber)
-                                .foregroundColor(colorScheme == .dark ? .white : .black)
                         }
-                        .frame(width: widths[index])
-                        .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
             }
@@ -105,7 +105,7 @@ struct SpeedDistributionView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
             .padding()
             .previewDisplayName("Light Mode")
-
+            
             SpeedDistributionView(
                 segments: [
                     (ratio: 0.0, time: 0),

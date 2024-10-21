@@ -27,9 +27,9 @@ extension TimeInterval {
         let minutes = (Int(self) % 3600) / 60
         
         if hours > 0 {
-            return String(format: "%d시간 %02d분", hours, minutes)
+            return String(format: "%dh %02dm", hours, minutes)
         } else {
-            return String(format: "%d분", minutes)
+            return String(format: "%dm", minutes)
         }
     }
 }
