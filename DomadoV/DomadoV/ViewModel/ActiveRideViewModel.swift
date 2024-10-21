@@ -68,7 +68,7 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
     }
     
     func formattedCurrentSpeed() -> String {
-        return String(format: "%.1f km/h", currentSpeed)
+        return String(format: "%.f", currentSpeed)
     }
     
 }
