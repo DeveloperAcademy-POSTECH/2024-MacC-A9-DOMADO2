@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ArcRangeSlider: View {
+    @Environment(\.colorScheme) var colorScheme
 
     @Binding var range: ClosedRange<Double>
     
@@ -36,8 +37,10 @@ struct ArcRangeSlider: View {
                                 endAngle: .degrees(180),
                                 clockwise: true)
                 }
-//                .stroke(Color.gray.opacity(0.3), lineWidth: sliderWidth)
-                .stroke(.midnightCharcoal.opacity(0.1), style: StrokeStyle(lineWidth: sliderWidth, lineCap: .round, lineJoin: .round))
+                .stroke(
+                    (colorScheme == .dark ? Color.white.opacity(0.3) : Color.midnightCharcoal.opacity(0.1)),
+                    style: StrokeStyle(lineWidth: sliderWidth, lineCap: .round, lineJoin: .round)
+                )
 
                 // Selected range arc
                 Path { path in
