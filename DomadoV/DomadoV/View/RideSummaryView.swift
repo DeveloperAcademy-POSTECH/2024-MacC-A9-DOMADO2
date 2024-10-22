@@ -31,7 +31,7 @@ struct RideSummaryView: View {
                         Button {
                             vm.dismissSummary()
                         } label: {
-                            Image(systemName: "multiply")
+                            Image(systemName: "xmark")
                                 .frame(width: 16, height: 16)
                                 .foregroundColor(.midnightCharcoal)
                                 .opacity(0.3)
