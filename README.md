@@ -1,5 +1,4 @@
-# Pacepal - 나만의 페이스 메이커 
-
+# PacePal - 나만의 페이스 메이커 
 <p align="center">
   <a href="">
     <img src="https://github.com/user-attachments/assets/ebcfde66-3d94-4a95-8022-4546345344b1" width="200" height="200" alt="app store">
@@ -8,6 +7,28 @@
 
 ## 🚴‍♂️ App Statement 
 **자전가 라이딩을 즐기는 사용자에게 현재 속도를 명확히 보여줘 화면을 자주 보지 않아도 원하는 페이스를 유지할 수 있도록 도와주자.**
+
+## 📱 앱 소개 
+<table style="width: 100%; table-layout: fixed;">
+  <tr>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/91dc16b2-f994-4cea-ae06-13d68fcc2e07" width="100%" alt="Image 1">
+    </td>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/3c059f38-2faf-4c02-85b7-5b9e44f6c2fc" width="100%" alt="Image 2">
+    </td>
+    <td style="text-align: center;">
+      <img src= "https://github.com/user-attachments/assets/bdec04fc-b92c-446b-a700-66777c0f9c1c" width="100%" alt="Image 3">
+    </td>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/b0f4f86a-c537-4374-8434-6161b0e3a9cf" width="100%" alt="Image 4">
+    </td>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/78af7a1d-0477-4216-8230-2675bd9c5870" width="100%" alt="Image 5">
+    </td>
+  </tr>
+</table>
+
 
 ## 🎨 Project Architecture 
 ```mermaid
