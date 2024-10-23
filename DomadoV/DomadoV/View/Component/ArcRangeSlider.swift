@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct ArcRangeSlider: View {
+    @Environment(\.colorScheme) var colorScheme
 
     @Binding var range: ClosedRange<Double>
     
     private let minimumGap: Double = 10
     private let numberOfMajorTicks: Int = 12 + 1
     private let numberOfMinorTicks: Int = 60
-    private let sliderWidth: CGFloat = 52
-    private let tickLength: CGFloat = 5
-    private let majorTickLength: CGFloat = 15
+    private let sliderWidth: CGFloat = 50
+    private let tickLength: CGFloat = 3.5
+    private let majorTickLength: CGFloat = 10.5
     private let gapBetweenSliderAndTicks: CGFloat = 3
-    private let handleSize: CGFloat = 52
+    private let handleSize: CGFloat = 39
 
     var body: some View {
         GeometryReader { geometry in
@@ -36,7 +37,10 @@ struct ArcRangeSlider: View {
                                 endAngle: .degrees(180),
                                 clockwise: true)
                 }
-                .stroke(Color.gray.opacity(0.3), lineWidth: sliderWidth)
+                .stroke(
+                    (colorScheme == .dark ? Color.white.opacity(0.3) : Color.midnightCharcoal.opacity(0.1)),
+                    style: StrokeStyle(lineWidth: sliderWidth, lineCap: .round, lineJoin: .round)
+                )
 
                 // Selected range arc
                 Path { path in
@@ -46,7 +50,7 @@ struct ArcRangeSlider: View {
                                 endAngle: Angle(degrees: 180 + (range.upperBound / 60 * 180)),
                                 clockwise: false)
                 }
-                .stroke(.lavenderPurple, lineWidth: sliderWidth)
+                .stroke(.lavenderPurple ,style: StrokeStyle(lineWidth: sliderWidth, lineCap: .round, lineJoin: .round))
 
                 // Minor ticks
                 ForEach(0..<numberOfMinorTicks) { index in
@@ -68,7 +72,7 @@ struct ArcRangeSlider: View {
                     Circle()
                         .fill(Color.white)
                         .frame(width: handleSize, height: handleSize)
-                        .shadow(color:.lavenderPurple, radius: 1)
+                        .shadow(color: .black.opacity(0.25), radius: 4, x: 0, y: 0)
                     Image(systemName: "bicycle")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -88,7 +92,7 @@ struct ArcRangeSlider: View {
                     Circle()
                         .fill(Color.white)
                         .frame(width: handleSize, height: handleSize)
-                        .shadow(color:.lavenderPurple, radius: 1)
+                        .shadow(color: .black.opacity(0.25), radius: 4, x: 0, y: 0)
                     Image(systemName: "bicycle")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -104,7 +108,7 @@ struct ArcRangeSlider: View {
                 )
             }
         }
-        .aspectRatio(1, contentMode: .fit)
+        .aspectRatio(2, contentMode: .fit)
         .padding()
     }
 
@@ -124,7 +128,7 @@ struct ArcRangeSlider: View {
             path.move(to: CGPoint(x: innerX, y: innerY))
             path.addLine(to: CGPoint(x: outerX, y: outerY))
         }
-        .stroke(isMajor ? .midnightCharcoal.opacity(0.5) : .midnightCharcoal.opacity(0.3), lineWidth: isMajor ? 2 : 1)
+        .stroke(isMajor ? .midnightCharcoal.opacity(0.3) : .midnightCharcoal.opacity(0.1), lineWidth: isMajor ? 2 : 1)
     }
 
     private func label(for value: Int, in size: CGSize) -> some View {
@@ -137,7 +141,7 @@ struct ArcRangeSlider: View {
         let y = centerY + radius * sin(CGFloat(angle) * .pi / 180)
 
         return Text("\(value)")
-            .font(.caption)
+            .customFont(.paceUnitNumber)
             .foregroundStyle(.midnightCharcoal)
             .position(x: x, y: y)
     }
