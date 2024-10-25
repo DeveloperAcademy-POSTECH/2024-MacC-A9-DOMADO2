@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import SwiftUI
 
 /// 주행화면에 대한 정보와 동작을 관리합니다. 
 class ActiveRideViewModel: ObservableObject, RideEventPublishable {
@@ -14,6 +15,11 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
     @Published var totalRideTime: TimeInterval = 0
     @Published var totalDistance: Double = 0
     @Published var currentSpeed: Double = 0
+        
+    @Published var backgroundColor: Color = .lavenderPurple
+    @Published var backgroundColorDark: Color = .lavenderPurpleDark
+    
+    var targetSpeedRange: ClosedRange<Double> = 0...15
     
     var rideSession: RideSession
     /// AppCoordinator에게 RideEvent를 발행하여 화면을 전환합니다.
@@ -23,6 +29,9 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
     init(rideSession: RideSession) {
         self.rideSession = rideSession
         setupSubscriptions()
+        
+        self.targetSpeedRange = rideSession.targetSpeedRange
+        changeBackground()
     }
     
     private func setupSubscriptions() {
@@ -71,4 +80,17 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
         return String(format: "%.f", currentSpeed)
     }
     
+
+    func changeBackground() {
+        if currentSpeed < targetSpeedRange.lowerBound {
+            backgroundColor = .electricBlue
+            backgroundColorDark = .electricBlueDark
+        } else if currentSpeed > targetSpeedRange.upperBound {
+            backgroundColor = .lavenderPurple
+            backgroundColorDark = .lavenderPurpleDark
+        } else {
+            backgroundColor = .sunsetOrange
+            backgroundColorDark = .sunsetOrangeDark
+        }
+    }
 }
