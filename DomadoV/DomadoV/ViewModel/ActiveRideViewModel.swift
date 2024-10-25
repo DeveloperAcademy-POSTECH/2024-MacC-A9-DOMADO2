@@ -86,11 +86,11 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
             backgroundColor = .electricBlue
             backgroundColorDark = .electricBlueDark
         } else if currentSpeed > targetSpeedRange.upperBound {
-            backgroundColor = .lavenderPurple
-            backgroundColorDark = .lavenderPurpleDark
-        } else {
             backgroundColor = .sunsetOrange
             backgroundColorDark = .sunsetOrangeDark
+        } else {
+            backgroundColor = .lavenderPurple
+            backgroundColorDark = .lavenderPurpleDark
         }
     }
 }
