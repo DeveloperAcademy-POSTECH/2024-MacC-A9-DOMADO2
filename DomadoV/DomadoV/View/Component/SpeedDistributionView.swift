@@ -10,7 +10,7 @@ import SwiftUI
 struct SpeedDistributionView: View {
     let segments: [(ratio: Double, time: TimeInterval)]
     let speedColors: [Color] = [.electricBlue, .lavenderPurple, .sunsetOrange]
-    let speedLabels: [String] = ["느림", "보통", "빠름"]
+    let speedLabels: [String] = [String(localized: "slow"), String(localized: "steady"), String(localized: "fast")]
     
     @Environment(\.colorScheme) private var colorScheme
     
