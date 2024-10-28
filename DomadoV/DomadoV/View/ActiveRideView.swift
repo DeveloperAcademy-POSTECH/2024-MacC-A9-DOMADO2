@@ -39,7 +39,7 @@ struct ActiveRideView: View {
         .padding([.horizontal, .bottom], 30)
         .background(
             // 페이스 기준 현재 속도에 따라 색상 변경
-            colorScheme == .dark ? .lavenderPurpleDark : .lavenderPurple
+            colorScheme == .dark ? vm.backgroundColorDark : vm.backgroundColor
         )
     }
     
