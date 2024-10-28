@@ -31,7 +31,6 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
         setupSubscriptions()
         
         self.targetSpeedRange = rideSession.targetSpeedRange
-//        changeBackground()
     }
     
     private func setupSubscriptions() {
@@ -56,7 +55,6 @@ class ActiveRideViewModel: ObservableObject, RideEventPublishable {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newSpeed in
                 self?.currentSpeed = newSpeed
-                //  이곳에서 해당 메서드를 호출해야합니다. 🦖
                 self?.changeBackground()
             }
             .store(in: &cancellables)
