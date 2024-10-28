@@ -44,7 +44,7 @@ struct RideHistoryCell: View {
             Image(systemName: "clock")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
-            Text("\(ride.startTime.formatAsKoreanTime(option: .hourMinute)) - \(ride.endTime.formatAsKoreanTime(option: .hourMinute))")
+            Text("\(ride.startTime.formatAsLocalizedTime(option: .hourMinute)) - \(ride.endTime.formatAsLocalizedTime(option: .hourMinute))")
                 .customFont(.listNumber)
                 .foregroundColor(.midnightCharcoal)
         }

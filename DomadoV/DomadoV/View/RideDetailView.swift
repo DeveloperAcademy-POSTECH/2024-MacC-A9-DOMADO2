@@ -29,9 +29,9 @@ struct RideDetailView: View {
                 SpeedDistributionView(segments: SpeedDistribution.calculateSpeedDistribution(speedDistribution: SpeedDistribution(belowTarget: ride.timeInSlowZone, withinTarget: ride.timeInTargetZone, aboveTarget: ride.timeInSlowZone), totalTime: ride.totalRidingTime))
                     .frame(maxWidth: .infinity, alignment: .center)
                 
-                InfoRow(label: "거리", value: ride.totalDistance.formatToDecimal(1) + " km")
+                InfoRow(label: String(localized: "totaldistance"), value: ride.totalDistance.formatToDecimal(1) + " km")
                     .padding(.vertical, 16)
-                InfoRow(label: "총 시간", value: ride.totalDuration.formatTime())
+                InfoRow(label: String(localized: "totaltime"), value: ride.totalDuration.formatTime())
                     .padding(.vertical, 19)
                 timeInfoView
                 
@@ -79,7 +79,7 @@ struct RideDetailView: View {
             Spacer()
             Image(systemName: "clock")
                 .customFont(.listNumber)
-            Text("\(ride.startTime.formatAsKoreanTime(option: .hourMinute)) - \(ride.endTime.formatAsKoreanTime(option: .hourMinute))")
+            Text("\(ride.startTime.formatAsLocalizedTime(option: .hourMinute)) - \(ride.endTime.formatAsLocalizedTime(option: .hourMinute))")
                 .customFont(.listNumber)
         }
         .foregroundColor(.midnightCharcoal)
@@ -100,8 +100,8 @@ struct RideDetailView: View {
     
     private var timeInfoView: some View {
         HStack(spacing: 50) {
-            InfoColumn(label: "주행시간", value: ride.totalRidingTime.formatTime())
-            InfoColumn(label: "휴식시간", value: ride.totalRestTime.formatTime())
+            InfoColumn(label: String(localized: "ridetime"), value: ride.totalRidingTime.formatTime())
+            InfoColumn(label: String(localized: "breaktime"), value: ride.totalRestTime.formatTime())
         }
         .padding(.vertical, -4)
     }
