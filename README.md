@@ -1,5 +1,125 @@
-# 2024-MacC-A9-DOMADO2
-🍎가 되지 말고 🍅가 되라
+# PacePal - 나만의 페이스 메이커 
+<p align="center">
+  <a href="">
+    <img src="https://github.com/user-attachments/assets/ebcfde66-3d94-4a95-8022-4546345344b1" width="200" height="200" alt="app store">
+  </a>
+</p>
+
+## 🚴‍♂️ App Statement 
+**자전가 라이딩을 즐기는 사용자에게 현재 속도를 명확히 보여줘 화면을 자주 보지 않아도 원하는 페이스를 유지할 수 있도록 도와주자.**
+
+## 📱 앱 소개 
+<table style="width: 100%; table-layout: fixed;">
+  <tr>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/91dc16b2-f994-4cea-ae06-13d68fcc2e07" width="100%" alt="Image 1">
+    </td>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/3c059f38-2faf-4c02-85b7-5b9e44f6c2fc" width="100%" alt="Image 2">
+    </td>
+    <td style="text-align: center;">
+      <img src= "https://github.com/user-attachments/assets/bdec04fc-b92c-446b-a700-66777c0f9c1c" width="100%" alt="Image 3">
+    </td>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/b0f4f86a-c537-4374-8434-6161b0e3a9cf" width="100%" alt="Image 4">
+    </td>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/78af7a1d-0477-4216-8230-2675bd9c5870" width="100%" alt="Image 5">
+    </td>
+  </tr>
+</table>
+
+
+## 🎨 Project Architecture 
+```mermaid
+flowchart TD
+    subgraph View["View"]
+        direction TB
+        A[ContentView]
+        J[RidePreparationView]
+        K[ActiveRideView]
+        L[PauseRideView]
+        M[RideSummaryView]
+        O[RideHistoryView]
+        P[RideDetailView]
+    end
+
+    subgraph ViewModel["ViewModel"]
+        direction TB
+        E[RidePreparationViewModel]
+        F[ActiveRideViewModel]
+        G[PauseRideViewModel]
+        H[RideSummaryViewModel]
+        N[RideHistoryViewModel]
+    end
+
+    subgraph Model["Model"]
+        direction TB
+        I[RideSession]
+        K1[LocationData]
+        L1[RestPeriod]
+        M1[SpeedDistribution]
+        N1[RideSummary]
+        Q[LocationManager]
+        R[CoreData]
+    end
+
+    subgraph Coordinator["Coordinator"]
+        direction TB
+        B[AppCoordinator]
+    end
+
+    subgraph Events["Events"]
+        direction TB
+        D[RideEventPublishable]
+        S[RideEvent]
+    end
+    
+    A -->|Uses| B
+    B -->|Manages| C((currentView))
+    B -->|Subscribes to| D
+    
+    D --> E & F & G & H & N
+    
+    E & F & G & H & N --> S
+    
+    S -->|Triggers| B
+    
+    C -->|Shows| J & K & L & M & O
+    
+    J -.->|User Action| E
+    K -.->|User Action| F
+    L -.->|User Action| G
+    M -.->|User Action| H
+    O -.->|User Action| N
+    
+    O -->|NavigationLink| P
+    O -.->|Back Button| N
+    
+    E & F & G & H & N -->|Uses| I
+    
+    I --> K1 & L1
+    I -->|Calculates| M1
+    I -->|Generates| N1
+    I -->|Uses| Q
+    Q -->|Provides| K1
+    R -->|Persists| I
+
+    classDef viewStyle fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef coordinatorStyle fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef eventStyle fill:#fbb,stroke:#333,stroke-width:2px;
+    classDef historyStyle fill:#bfb,stroke:#333,stroke-width:2px;
+    classDef sessionStyle fill:#ffa,stroke:#333,stroke-width:2px;
+    classDef componentStyle fill:#afa,stroke:#333,stroke-width:2px;
+
+    class A,J,K,L,M,O,P viewStyle;
+    class B coordinatorStyle;
+    class S eventStyle;
+    class O,P historyStyle;
+    class I sessionStyle;
+    class K1,L1,M1,N1 componentStyle;
+```
+
 
 ## 🧩 Team 
 <table style="width: 100%; table-layout: fixed;">
@@ -54,8 +174,8 @@ ex) `[feat] 로그인 기능 추가`
 ### 브랜치 이름 ➡️ `이슈종류/#이슈 번호/적업할내용`
 ex) `feat/#3-Login`
 
-### 커밋 이름 ➡️ `이슈종류: 이슈번호 - 작업내용`  
-ex) `feat:#3-로그인 버튼 추가` 
+### 커밋 이름 ➡️ `이슈종류/#이슈 번호 - 작업내용`  
+ex) `feat/#3-로그인 버튼 추가` 
 
 ### 풀리퀘스트 이름 ➡️ `[이슈종류] 작업내용`
 ex) `[feat] 로그인 기능 완료`
