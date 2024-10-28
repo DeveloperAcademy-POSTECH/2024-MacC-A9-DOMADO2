@@ -98,8 +98,6 @@ struct PauseRideView: View {
     
     private var stopButton: some View {
         Button(action: {
-            // 탭 동작
-            print("Tapped")
             showAlert = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 showAlert = false
@@ -120,12 +118,8 @@ struct PauseRideView: View {
             LongPressGesture(minimumDuration: 1.0)
                 .onChanged { isPressing in
                     isLongPressing = isPressing
-                    if isPressing {
-                        print("Long press started")
-                    }
                 }
                 .onEnded { _ in
-                    print("Long press completed")
                     vm.finishRide()
                     isLongPressing = false
                 }

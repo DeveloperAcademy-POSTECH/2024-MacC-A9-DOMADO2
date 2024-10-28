@@ -12,18 +12,15 @@ struct CountdownView: View {
     
     var body: some View {
         ZStack {
-            // 배경 원
             Circle()
                 .stroke(Color.gray.opacity(0.3), lineWidth: 10)
             
-            // 채워진 부분
             Circle()
                 .trim(from: 0, to: CGFloat(vm.countdownTime) / 3.0)
                 .stroke(.sunsetOrange, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                 .rotationEffect(.degrees(-90))
                 .animation(.easeInOut(duration: 1), value: vm.countdownTime)
             
-            // 카운트다운 숫자
             Text("\(vm.countdownTime)")
                 .customFont(.paceSettingNumber)
         }
