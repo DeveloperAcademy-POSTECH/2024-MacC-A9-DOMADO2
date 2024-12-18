@@ -4,6 +4,12 @@
     <img src="https://github.com/user-attachments/assets/ebcfde66-3d94-4a95-8022-4546345344b1" width="200" height="200" alt="app store">
   </a>
 </p>
+<p align="center">
+  <a href="https://apps.apple.com/kr/app/pacepal/id6737474748">
+    <img src="https://github.com/OneMoreThink/Earth/assets/121593683/0193bc32-c702-42f5-9549-cca277d63870" width="200" height="80" alt="app store">
+  </a>
+</p>
+
 
 ## 🚴‍♂️ App Statement 
 **자전가 라이딩을 즐기는 사용자에게 현재 속도를 명확히 보여줘 화면을 자주 보지 않아도 원하는 페이스를 유지할 수 있도록 도와주자.**
