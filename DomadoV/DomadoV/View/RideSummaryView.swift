@@ -29,6 +29,7 @@ struct RideSummaryView: View {
                         Spacer()
                         
                         Button {
+                            HapticManager.shared.impact(.light)
                             vm.dismissSummary()
                         } label: {
                             Image(systemName: "xmark")

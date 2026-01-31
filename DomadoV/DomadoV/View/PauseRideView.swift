@@ -99,6 +99,7 @@ struct PauseRideView: View {
     private var stopButton: some View {
         Button(action: {
             showAlert = true
+            HapticManager.shared.notify(.warning)
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 showAlert = false
             }
@@ -120,6 +121,7 @@ struct PauseRideView: View {
                     isLongPressing = isPressing
                 }
                 .onEnded { _ in
+                    HapticManager.shared.notify(.success)
                     vm.finishRide()
                     isLongPressing = false
                 }
@@ -128,6 +130,7 @@ struct PauseRideView: View {
     }
     private var playButton: some View {
         Button{
+            HapticManager.shared.impact(.medium)
             vm.resumeRide()
         } label: {
             
@@ -177,6 +180,7 @@ struct PauseRideView: View {
     
     private var closeButton: some View {
         Button(action: {
+            HapticManager.shared.impact(.light)
             print("버튼이 닫혔습니다")
             showAlert = false
         }) {

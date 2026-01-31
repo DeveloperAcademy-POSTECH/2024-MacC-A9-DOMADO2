@@ -34,6 +34,7 @@ struct RideHistoryView: View {
     private var navigationBar: some View {
         HStack {
             Button(action: {
+                HapticManager.shared.impact(.light)
                 vm.returnToPreparation()
             }) {
                 Image(systemName: "chevron.left")
@@ -58,6 +59,7 @@ struct RideHistoryView: View {
             ForEach(vm.records) { record in
                 RideHistoryCell(ride: record)
                     .onTapGesture {
+                        HapticManager.shared.selectionChanged()
                         vm.selectedRide = record
                     }
                     .listRowInsets(EdgeInsets())
@@ -91,6 +93,9 @@ struct RideHistoryView: View {
     
     private func deleteRecord(at offsets: IndexSet) {
         let recordsToDelete = offsets.map { vm.records[$0] }
+        if !recordsToDelete.isEmpty {
+            HapticManager.shared.notify(.warning)
+        }
         
         for record in recordsToDelete {
             vm.deleteRecord(record)

@@ -102,6 +102,7 @@ struct ActiveRideView: View {
     private var pauseButton: some View {
         HStack {
             Button(action: {
+                HapticManager.shared.impact(.medium)
                 vm.pauseRide()
             }) {
                 Circle()

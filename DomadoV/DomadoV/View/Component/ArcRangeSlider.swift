@@ -11,6 +11,8 @@ struct ArcRangeSlider: View {
     @Environment(\.colorScheme) var colorScheme
 
     @Binding var range: ClosedRange<Double>
+    @State private var lastStartStep: Int?
+    @State private var lastEndStep: Int?
     
     private let minimumGap: Double = 10
     private let numberOfMajorTicks: Int = 12 + 1
@@ -110,6 +112,9 @@ struct ArcRangeSlider: View {
         }
         .aspectRatio(2, contentMode: .fit)
         .padding()
+        .onAppear {
+            HapticManager.shared.prepare()
+        }
     }
 
     private func tickMark(at index: Int, in size: CGSize, isMajor: Bool) -> some View {
@@ -174,20 +179,41 @@ struct ArcRangeSlider: View {
              newValue = (angle - 180) / 180 * 60
          }
 
+         let clampedValue: Double
          if isStartHandle {
              if newValue >= 59 {
                  range = 0...(range.upperBound)  // Cap at 0 when trying to go below
+                 clampedValue = 0
              } else {
-                 range = min(max(0, newValue), range.upperBound - minimumGap)...range.upperBound
+                 let nextValue = min(max(0, newValue), range.upperBound - minimumGap)
+                 range = nextValue...range.upperBound
+                 clampedValue = nextValue
              }
          } else {
              if newValue <= 1 {
                  range = range.lowerBound...60  // Cap at 60 when trying to exceed
+                 clampedValue = 60
              } else {
-                 range = range.lowerBound...min(max(range.lowerBound + minimumGap, newValue), 60)
+                 let nextValue = min(max(range.lowerBound + minimumGap, newValue), 60)
+                 range = range.lowerBound...nextValue
+                 clampedValue = nextValue
              }
          }
+
+         triggerHapticIfNeeded(for: clampedValue, isStartHandle: isStartHandle)
      }
+
+    private func triggerHapticIfNeeded(for value: Double, isStartHandle: Bool) {
+        let stepValue = Int(value.rounded())
+        if isStartHandle {
+            guard stepValue != lastStartStep else { return }
+            lastStartStep = stepValue
+        } else {
+            guard stepValue != lastEndStep else { return }
+            lastEndStep = stepValue
+        }
+        HapticManager.shared.selectionChanged()
+    }
 }
 
 

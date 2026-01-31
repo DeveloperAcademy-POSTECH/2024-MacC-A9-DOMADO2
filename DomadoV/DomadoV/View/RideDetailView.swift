@@ -43,6 +43,7 @@ struct RideDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    HapticManager.shared.impact(.light)
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     HStack {
@@ -58,6 +59,7 @@ struct RideDetailView: View {
     
     private var customBackButton: some View {
         Button(action: {
+            HapticManager.shared.impact(.light)
             presentationMode.wrappedValue.dismiss()
         }) {
             HStack {

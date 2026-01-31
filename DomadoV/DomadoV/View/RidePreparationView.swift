@@ -41,6 +41,7 @@ struct RidePreparationView: View {
                             Spacer()
                             
                             Button {
+                                HapticManager.shared.impact(.light)
                                 vm.showHistory()
                             } label: {
                                 Text("운동 기록")
@@ -81,6 +82,7 @@ struct RidePreparationView: View {
                         
                         // 라이딩 시작 버튼
                         Button {
+                            HapticManager.shared.impact(.medium)
                             vm.startRide()
                         } label: {
                             ZStack{
@@ -108,10 +110,18 @@ struct RidePreparationView: View {
                         title: Text("위치 권한 필요"),
                         message: Text("이 앱은 위치 정보를 사용하여 주행을 기록합니다. 설정에서 위치 권한을 허용해주세요."),
                         primaryButton: .default(Text("설정으로 이동")) {
+                            HapticManager.shared.notify(.warning)
                             vm.openSystemSettings()
                         },
-                        secondaryButton: .cancel(Text("취소"))
+                        secondaryButton: .cancel(Text("취소")) {
+                            HapticManager.shared.impact(.light)
+                        }
                     )
+                }
+                .onChange(of: vm.showLocationPermissionAlert) { isPresented in
+                    if isPresented {
+                        HapticManager.shared.notify(.warning)
+                    }
                 }
             }
         }
